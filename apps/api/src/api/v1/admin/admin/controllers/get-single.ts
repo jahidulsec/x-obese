@@ -1,4 +1,3 @@
-import { prisma } from "@repo/database";
 import { Hono } from "hono";
 import { validator } from "hono/validator";
 import { ErrorFactory } from "../../../../../utils/error.js";

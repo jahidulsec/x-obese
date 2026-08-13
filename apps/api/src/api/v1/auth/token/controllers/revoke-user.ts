@@ -32,13 +32,10 @@ revokeUserToken.post(
 
     // create new access token
     const accessToken = await jwtInstance.sign(
-      { username: user.id, role: "user" },
+      { id: user.id, role: "user" },
       "access",
     );
-    const refreshToken = await jwtInstance.sign(
-      { username: user.id },
-      "refresh",
-    );
+    const refreshToken = await jwtInstance.sign({ id: user.id }, "refresh");
 
     // Set new refresh token cookie
     setCookie(c, "refreshToken", refreshToken, {

@@ -42,13 +42,10 @@ adminLogin.post(
 
     // create tokens
     const accessToken = await jwtInstance.sign(
-      { username: admin.id, role: admin.role },
+      { id: admin.id, role: admin.role },
       "access",
     );
-    const refreshToken = await jwtInstance.sign(
-      { username: admin.id },
-      "refresh",
-    );
+    const refreshToken = await jwtInstance.sign({ id: admin.id }, "refresh");
 
     return c.json(
       apiResponse.single({

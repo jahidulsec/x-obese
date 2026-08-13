@@ -30,7 +30,7 @@ revokeAdminToken.post(
 
     // create new access token
     const accessToken = await jwtInstance.sign(
-      { username: admin.id, role: admin.role },
+      { id: admin.id, role: admin.role },
       "access",
     );
 
