@@ -214,7 +214,11 @@ const getStats = async (type?: MarathonType) => {
   return data._count.id;
 };
 
-const createNew = async (info: createMarathonInputsTypes) => {
+const createNew = async (
+  info: createMarathonInputsTypes & {
+    fileName?: string;
+  },
+) => {
   const rewardsList = (info.rewards ?? []).map((title) => ({
     text: title,
   }));
@@ -228,7 +232,7 @@ const createNew = async (info: createMarathonInputsTypes) => {
       description: info.description,
       type: info.type,
       distanceKm: info.distanceKm,
-      imagePath: info.imagePath,
+      imagePath: info.fileName,
       Rewards: {
         createMany: {
           data: rewardsList,
@@ -253,7 +257,7 @@ const createNew = async (info: createMarathonInputsTypes) => {
 
 const updateOne = async (
   idObj: requiredIdTypes,
-  info: updateMarathonInputTypes,
+  info: updateMarathonInputTypes & { fileName?: string },
 ) => {
   //extract id from validated id by zod
   const { id } = idObj;
@@ -272,7 +276,7 @@ const updateOne = async (
       description: info.description,
       type: info.type,
       distanceKm: info.distanceKm,
-      imagePath: info.imagePath,
+      imagePath: info.fileName,
       ...(info.rewards && {
         Rewards: {
           createMany: {

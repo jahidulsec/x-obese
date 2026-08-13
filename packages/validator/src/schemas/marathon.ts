@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { imageSchema } from "./common";
 
 export const createMarathonAgeRuleDTOSchema = z.object({
   marathonId: z.string().min(2, "At least 2 characters"),
@@ -25,7 +26,7 @@ export const createMarathonDTOSchema = z.object({
   rewards: z.array(z.string()).optional(),
   reward: z.string().min(2),
 
-  imagePath: z.string().optional(),
+  imagePath: imageSchema.optional(),
 
   type: z.enum(["onsite", "virtual"]),
 
