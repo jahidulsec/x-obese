@@ -26,6 +26,7 @@ createAdmin.post(
         message: "New admin created successfully!",
         data: created,
       }),
+      201,
     );
   },
 );

@@ -9,4 +9,4 @@ export * from "./schemas/user-login";
 export * from "./schemas/user";
 export * from "./schemas/workout";
 export * from "./schemas/workout-plan";
-
+export * from "./schemas/token";
