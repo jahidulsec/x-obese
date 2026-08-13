@@ -1,0 +1,22 @@
+{
+  "name": "@repo/validator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --watch"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  }
+}
