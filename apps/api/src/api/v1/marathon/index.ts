@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { mMarathonRouter } from "./marathon/index.ts";
 import { marathonUserRouter } from "./user/index.ts";
-import { jwtMiddleware } from "../../../middlewares/jwt.ts";
 import { getMarathonStats } from "./marathon/controllers/get-stats.ts";
 
 const marathonRouter = new Hono();
