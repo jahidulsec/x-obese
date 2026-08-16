@@ -12,7 +12,10 @@ export const env = createEnv({
     PORT: z.coerce.number().optional(),
     ACCESS_TOKEN_SECRET: z.string().min(6),
     REFRESH_TOKEN_SECRET: z.string().min(6),
-    DEFAULT_PASSWORD: z.string().min(6),
+    DEFAULT_PASS: z.string().min(6),
+    SSL_STATUS: z.string().optional().default("0"),
+    SMS_USERNAME: z.string().min(1),
+    SMS_PASSWORD: z.string().min(1),
   },
   runtimeEnv: process.env,
 });
