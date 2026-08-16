@@ -27,11 +27,8 @@ createMarathon.post(
     const { reward, imagePath, ...validatedData } = c.req.valid("form");
 
     if (imagePath) {
-      const { fileName } = await saveFileToStorage(
-        imagePath,
-        '',
-      );
-      createdFileName = fileName;
+      const { filePath } = await saveFileToStorage(imagePath, "marathon");
+      createdFileName = filePath;
     }
 
     // create list of reward from form data
