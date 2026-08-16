@@ -1,12 +1,13 @@
 import { z } from "zod";
 import { phoneRegex } from "./regex";
+import { imageSchema } from "./common";
 
 export const createUserDTOSchema = z.object({
   mobile: z.string().regex(phoneRegex, { message: "Invalid phone number" }),
   fullName: z.string().optional(),
-  email: z.string().email().optional(),
+  email: z.email().optional(),
   gender: z.string().optional(),
-  image: z.string().optional(),
+  image: imageSchema.optional(),
   birth: z.coerce.date().optional(),
   address: z.string().optional(),
   heightFt: z.coerce.number().optional(),

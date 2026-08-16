@@ -62,10 +62,14 @@ const getSingleByMobile = async (mobile: string) => {
   return data;
 };
 
-const createNew = async (info: createUserInputsTypes) => {
+const createNew = async (
+  info: createUserInputsTypes & { filePath?: string },
+) => {
+  const { image, filePath, ...rest } = info;
   const data = await prisma.users.create({
     data: {
-      ...info,
+      ...rest,
+      image: filePath,
     },
   });
 
@@ -74,14 +78,15 @@ const createNew = async (info: createUserInputsTypes) => {
 
 const updateOne = async (
   idObj: requiredIdTypes,
-  info: updateUserInputTypes,
+  info: updateUserInputTypes & { filePath?: string },
 ) => {
   //extract id from validated id by zod
   const { id } = idObj;
+  const { filePath, image, ...rest } = info;
 
   const updatedData = await prisma.users.update({
     where: { id: id },
-    data: { ...info },
+    data: { ...rest, image: filePath },
   });
   return updatedData;
 };
