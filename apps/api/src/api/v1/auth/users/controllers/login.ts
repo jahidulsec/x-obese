@@ -47,14 +47,16 @@ userLogin.post(
     }
 
     //create new with validated data
-    const created = await authService.getLoginOtp(validatedData);
+    const created = await authService.getLoginOtp({
+      mobile: validatedData.mobile,
+    });
 
     // send otp to mobile
     const message = `Your One-Time Password (OTP) for X-Obses login is ${created.code}.`;
 
     // avoid test number
-    if (created.mobile) {
-      sendSMS(created.mobile, message).catch((err) => console.error(err));
+    if (validatedData.mobile) {
+      sendSMS(validatedData.mobile, message).catch((err) => console.error(err));
     }
 
     return c.json(
