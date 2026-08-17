@@ -1,8 +1,9 @@
 import { z } from "zod";
+import { imageSchema } from "./common";
 
 export const createBannerDTOSchema = z.object({
   title: z.string().min(3),
-  imagePath: z.string().min(3),
+  imagePath: imageSchema,
 });
 
 export const updateBannerDTOSchema = createBannerDTOSchema

@@ -1,10 +1,11 @@
 import { z } from "zod";
+import { imageSchema } from "./common";
 
 export const createBlogDTOSchema = z.object({
   title: z.string().min(3),
   description: z.string().min(3),
   details: z.string().min(3),
-  imagePath: z.string().min(3),
+  imagePath: imageSchema,
   readTime: z.coerce.number().min(1),
   createdBy: z.string().optional(),
 });
