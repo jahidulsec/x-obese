@@ -12,7 +12,7 @@ export const generateFileLink = (c: Context, filePath: string) => {
 
   const host = c.req.header("host") || url.host;
 
-  return `${protocol}://${host}/files${filePath}`;
+  return `${protocol}://${host}/files/${filePath}`;
 };
 
 export const saveFileToStorage = async (file: File, folderName: string) => {

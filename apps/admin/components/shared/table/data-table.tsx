@@ -1,6 +1,11 @@
 "use client";
 
-import { useTable, type ColumnDef, type RowData } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  useTable,
+  type ColumnDef,
+  type RowData,
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -25,9 +30,10 @@ export const useTableSerialColumn = <TData extends RowData>(): ColumnDef<
   DataTableFeatures,
   TData
 > => {
+  const columnHelper = createColumnHelper<DataTableFeatures, TData>();
   const searchParams = useSearchParams();
 
-  return {
+  return columnHelper.display({
     id: "sl",
     header: "#",
     cell: ({ row }) => {
@@ -39,9 +45,10 @@ export const useTableSerialColumn = <TData extends RowData>(): ColumnDef<
         ? Number(searchParams.get("page"))
         : DEFAULT_PAGE;
       const serial = (validatedPage - 1) * validatedSize + row.index + 1;
-      return <p className="max-w-0">{serial}</p>;
+      return <p className="max-w-0 font-semibold font-mono">{serial}</p>;
     },
-  };
+    size: 20,
+  });
 };
 
 export function DataTable<TData extends RowData>({
@@ -57,12 +64,15 @@ export function DataTable<TData extends RowData>({
   return (
     <div className="overflow-hidden rounded-md border">
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-muted/50">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    style={{ width: header.getSize() }}
+                  >
                     {header.isPlaceholder ? null : (
                       <table.FlexRender header={header} />
                     )}
@@ -80,7 +90,7 @@ export function DataTable<TData extends RowData>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id}  style={{ width: cell.column.getSize() }}>
                     <table.FlexRender cell={cell} />
                   </TableCell>
                 ))}

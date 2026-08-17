@@ -17,6 +17,7 @@ import { deleteBanner } from "../actions/banner";
 import { FormSheet } from "@/components/shared/sheet/sheet";
 import BannerForm from "./form";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const columnHelper = createColumnHelper<DataTableFeatures, Banner>();
@@ -29,15 +30,29 @@ export default function BannerTable({ data }: { data: Banner[] }) {
 
   const columns = columnHelper.columns([
     serialNo,
+    columnHelper.accessor("imagePath", {
+      id: "Image",
+      header: '',
+      size: 32,
+      cell: ({ row }) => (
+        <Avatar size='lg'>
+          <AvatarImage className={'rounded-md'} src={row.original.imagePath} />
+          <AvatarFallback>{row.original.title.charAt(0)}</AvatarFallback>
+        </Avatar>
+      ),
+    }),
     columnHelper.accessor("title", {
       header: "Title",
+      size: 1000,
     }),
     columnHelper.accessor("createdAt", {
       header: "Created At",
-      cell: ({ row }) => <p>{formatDate(row.getValue("createdAt"))}</p>,
+      cell: ({ row }) => <p className="text-sm text-muted-foreground">{formatDate(row.getValue("createdAt"))}</p>,
+      size: 10,
     }),
     columnHelper.display({
       id: "actions",
+      size: 10,
       cell: ({ row }) => {
         const value = row.original;
 

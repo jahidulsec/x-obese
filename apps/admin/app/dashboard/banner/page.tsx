@@ -2,6 +2,7 @@ import { ErrorBoundary } from "@/components/shared/boundary/error-boundary";
 import PagePagination from "@/components/shared/pagination/pagination";
 import { Section, SectionHeader } from "@/components/shared/section/section";
 import { TableSkeleton } from "@/components/shared/skeleton/table";
+import CreateBannerButton from "@/features/banner/components/create-button";
 import BannerTable from "@/features/banner/components/table";
 import { getBanners } from "@/features/banner/lib/banner";
 import { SearchParams } from "@/types/search-params";
@@ -17,6 +18,8 @@ export default function BannerPage({
       <Section>
         <SectionHeader>
           <h1 className="text-2xl font-semibold font-heading">Banner</h1>
+
+          <CreateBannerButton />
         </SectionHeader>
       </Section>
 
