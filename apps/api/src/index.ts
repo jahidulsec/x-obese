@@ -1,12 +1,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { env } from "./libs/env.ts";
-
-const app = new Hono();
-
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
+import { app } from "./app.ts";
 
 serve(
   {

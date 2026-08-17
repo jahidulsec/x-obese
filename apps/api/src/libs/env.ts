@@ -4,6 +4,7 @@ import * as z from "zod";
 
 export const env = createEnv({
   server: {
+    DATABASE_URL: z.string().min(3),
     DATABASE_USER: z.string().min(3),
     DATABASE_PASSWORD: z.string().min(6),
     DATABASE_NAME: z.string().min(3),

@@ -24,7 +24,7 @@ app.use(
 // api routes
 app.route("/api", apiRouter);
 
-app.get("/health", (c) => {
+app.get("/health", async (c) => {
   c.status(200);
   return c.json({
     status: "ok",
