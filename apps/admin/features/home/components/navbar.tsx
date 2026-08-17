@@ -1,3 +1,4 @@
+import { Logo } from "@/components/shared/logo/logo";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
@@ -7,8 +8,9 @@ export default function Navbar() {
     <header className="bg-muted">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link href={"/"}>
-          <h1 className="text-xl">
-            X<strong>Obese</strong>
+          <h1 className="text-xl flex items-start gap-1">
+            <Logo size={22} />
+            <strong>Obese</strong>
           </h1>
         </Link>
 

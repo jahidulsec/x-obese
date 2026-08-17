@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import React from 'react'
+import React from "react";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
+import ProgressProviders from "@/providers/progress-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +27,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} font-sans h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ProgressProviders>
+          <TooltipProvider>
+            {children}
+            <Toaster closeButton richColors position="top-right" />
+          </TooltipProvider>
+        </ProgressProviders>
+      </body>
     </html>
   );
 }
