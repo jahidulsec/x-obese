@@ -54,10 +54,14 @@ const getSingle = async (idObj: requiredIdTypes) => {
   return data;
 };
 
-const createNew = async (info: createBlogInputsTypes) => {
+const createNew = async (
+  info: createBlogInputsTypes & { filePath: string },
+) => {
+  const { imagePath, filePath, ...rest } = info;
   const data = await prisma.blogs.create({
     data: {
-      ...info,
+      ...rest,
+      imagePath: filePath,
     },
   });
 
@@ -66,14 +70,15 @@ const createNew = async (info: createBlogInputsTypes) => {
 
 const updateOne = async (
   idObj: requiredIdTypes,
-  info: updateBlogInputTypes,
+  info: updateBlogInputTypes & { filePath?: string },
 ) => {
   //extract id from validated id by zod
   const { id } = idObj;
+  const { imagePath, filePath, ...rest } = info;
 
   const updatedData = await prisma.blogs.update({
     where: { id: id },
-    data: { ...info },
+    data: { ...rest, imagePath: filePath },
   });
   return updatedData;
 };
