@@ -72,17 +72,18 @@ class FetchApiJSON {
   }
 
   private async getNewToken(): Promise<string | null> {
+    console.log('new token')
     const refreshToken = await decryptToken("rt");
 
     if (!refreshToken) return null;
 
-    const res = await fetch(`${this._baseUrl}/api/v1/auth/token/revoke/admin`, {
+    const res = await fetch(`${this._baseUrl}/api/auth/v1/token/admin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        refresh_token: refreshToken,
+        refreshToken: refreshToken,
       }),
     });
 
@@ -90,7 +91,7 @@ class FetchApiJSON {
 
     if (!res.ok) return null;
 
-    return data.data.access_token;
+    return data.data.accessToken;
   }
 
   async fetchBlob(

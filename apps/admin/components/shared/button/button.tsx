@@ -51,6 +51,7 @@ const FormButton = ({
   children,
   isPending,
   className,
+  type = "submit",
   ...props
 }: ButtonProps & { isPending?: boolean }) => {
   return (
@@ -58,6 +59,7 @@ const FormButton = ({
       className={cn("font-semibold", className)}
       {...props}
       disabled={isPending || props.disabled}
+      type={type}
     >
       {isPending ? <Loader className="animate-spin" /> : children}
     </Button>
@@ -113,7 +115,7 @@ const tableButtonVariants = cva("rounded-full", {
   variants: {
     variant: {
       default: "",
-      edit: "text-primary",
+      edit: "text-secondary",
       delete: "text-destructive",
     },
   },

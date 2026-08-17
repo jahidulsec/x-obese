@@ -25,7 +25,10 @@ const SectionHeader = ({
 }: React.ComponentProps<"div">) => {
   return (
     <div
-      className={cn("flex items-center justify-between gap-5", className)}
+      className={cn(
+        "flex items-center justify-between gap-5 flex-wrap lg:flex-nowrap",
+        className,
+      )}
       {...props}
     />
   );

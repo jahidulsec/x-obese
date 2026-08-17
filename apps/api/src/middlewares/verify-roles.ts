@@ -7,7 +7,7 @@ type AuthUser = {
 
 export const verifyRoles = (...allowedRoles: string[]) =>
   createMiddleware(async (c, next) => {
-    const authUser = c.get("user") as AuthUser | undefined;
+    const authUser = c.get("jwtPayload") as AuthUser | undefined;
 
     if (!authUser || !authUser.role) {
       throw ErrorFactory.create(

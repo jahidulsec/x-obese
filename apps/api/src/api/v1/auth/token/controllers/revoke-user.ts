@@ -11,7 +11,7 @@ import { addMinutesToDate } from "../../../../../libs/otp.ts";
 const revokeUserToken = new Hono();
 
 revokeUserToken.post(
-  "/revoke/user",
+  "/",
   validator("json", (value) => {
     const parsed = revokeTokenSchema.parse(value);
     return parsed;

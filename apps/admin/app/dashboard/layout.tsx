@@ -1,6 +1,6 @@
 import React from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
+import { AppSidebar } from "@/components/shared/sidebar/app-sidebar";
+import { SiteHeader } from "@/components/shared/sidebar/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {

@@ -9,7 +9,7 @@ import { apiResponse } from "../../../../../libs/response.ts";
 const revokeAdminToken = new Hono();
 
 revokeAdminToken.post(
-  "/revoke/admin",
+  "/",
   validator("json", (value) => {
     const parsed = revokeTokenSchema.parse(value);
     return parsed;
@@ -33,6 +33,8 @@ revokeAdminToken.post(
       { id: admin.id, role: admin.role },
       "access",
     );
+
+    console.log("new token : ", accessToken)
 
     return c.json(
       apiResponse.single({
