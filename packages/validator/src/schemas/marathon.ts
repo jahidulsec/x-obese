@@ -30,8 +30,6 @@ export const createMarathonDTOSchema = z.object({
 
   type: z.enum(["onsite", "virtual"]),
 
-  createdBy: z.string().optional(),
-
   ageRule: z
     .array(
       createMarathonAgeRuleDTOSchema

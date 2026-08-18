@@ -7,7 +7,6 @@ export const createBlogDTOSchema = z.object({
   details: z.string().min(3),
   imagePath: imageSchema,
   readTime: z.coerce.number().min(1),
-  createdBy: z.string().optional(),
 });
 
 export const updateBlogDTOSchema = createBlogDTOSchema

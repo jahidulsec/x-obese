@@ -21,7 +21,6 @@ const BackButton = ({ href }: { href?: string }) => {
     <Button
       size={"icon"}
       variant={"outline"}
-      className="text-secondary border-primary rounded-full"
       onClick={() => {
         if (href) {
           router.push(href);

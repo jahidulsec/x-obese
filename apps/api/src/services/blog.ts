@@ -18,13 +18,6 @@ const getMulti = async (queries: blogsQueryInputTypes) => {
           startsWith: queries.search || undefined,
         },
       },
-      include: {
-        admin: {
-          select: {
-            name: true,
-          },
-        },
-      },
       take: size,
       skip: size * (page - 1),
       orderBy: {

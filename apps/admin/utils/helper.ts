@@ -1,12 +1,47 @@
-export const convertIntoFormData = (data: any) => {
+import { boolean } from "zod";
+
+export const convertIntoFormData = (data: Record<string, any>): FormData => {
   const formData = new FormData();
 
-  Object.entries(data).forEach(([key, value]) => {
-    if (value instanceof File) {
-      formData.append(key, value);
-    } else if (value !== undefined && value !== null) {
-      formData.append(key, String(value));
+  const appendValue = (key: string, value: any) => {
+    if (value === undefined || value === null) {
+      return;
     }
+
+    // File / Blob
+    if (value instanceof File || value instanceof Blob) {
+      formData.append(key, value);
+      return;
+    }
+
+    // Date
+    if (value instanceof Date) {
+      formData.append(key, value.toISOString());
+      return;
+    }
+
+    // Array
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        appendValue(`${key}[]`, item);
+      });
+      return;
+    }
+
+    // Object
+    if (typeof value === "object") {
+      Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+        appendValue(`${key}[${nestedKey}]`, nestedValue);
+      });
+      return;
+    }
+
+    // String, number, boolean, bigint
+    formData.append(key, String(value));
+  };
+
+  Object.entries(data).forEach(([key, value]) => {
+    appendValue(key, value);
   });
 
   return formData;

@@ -48,10 +48,6 @@ export default function BannerForm({
     }
   }
 
-  React.useEffect(() => {
-    console.log(form.formState.errors);
-  }, [form.formState.errors]);
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>

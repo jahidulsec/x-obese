@@ -15,8 +15,6 @@ model Admins {
   role      AdminRoles @default(admin)
   createdAt DateTime   @default(now()) @map("created_at")
   updateAt  DateTime   @updatedAt @map("updated_at")
-  Blogs     Blogs[]
-  marathon  Marathon[]
 
   @@map("admin")
 }
@@ -117,17 +115,14 @@ model Marathon {
   endDate        DateTime         @map("end_date")
   imagePath      String?          @map("image_path")
   type           MarathonType     @default(onsite)
-  createdBy      String?          @map("created_by")
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
   location       String?
   distanceKm     Int
-  admin          Admins?          @relation(fields: [createdBy], references: [id])
   marathoAgeRule marathoAgeRule[]
   MarathonUser   MarathonUser[]
   Rewards        Rewards[]
 
-  @@index([createdBy], map: "marathon_created_by_fkey")
   @@map("marathon")
 }
 
@@ -168,11 +163,8 @@ model Blogs {
   details     String   @db.Text
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-  createdBy   String?  @map("created_by")
   imagePath   String   @map("image_path")
-  admin       Admins?  @relation(fields: [createdBy], references: [id])
 
-  @@index([createdBy], map: "blogs_created_by_fkey")
   @@map("blogs")
 }
 

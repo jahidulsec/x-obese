@@ -34,9 +34,6 @@ createMarathon.post(
     // create list of reward from form data
     validatedData.rewards = reward.split(",");
 
-    // add admin info
-    validatedData.createdBy = authUser.id ?? "";
-
     if (validatedData.type === "onsite" && !validatedData.location) {
       throw ErrorFactory.create(
         "BAD_REQUEST",

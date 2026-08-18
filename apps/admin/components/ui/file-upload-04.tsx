@@ -9,9 +9,11 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import React from "react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface FileUploadProps {
   onValueChange?: (value: File | null) => void;
+  className?: string;
 
   /**
    * Accepted file extensions.
@@ -34,6 +36,7 @@ export default function FileUpload({
   onValueChange,
   validFileTypes = ["csv", "xlsx", "xls"],
   maxSizeMB = 10,
+  className,
 }: FileUploadProps) {
   const [uploadState, setUploadState] = useState<{
     file: File | null;
@@ -184,7 +187,12 @@ export default function FileUpload({
   const { file, progress } = uploadState;
 
   return (
-    <div className="flex w-full max-w-lg flex-col items-center justify-center">
+    <div
+      className={cn(
+        "flex w-full max-w-xl flex-col items-center justify-center",
+        className,
+      )}
+    >
       <div
         className="flex w-full justify-center rounded-md border border-input border-dashed px-6 py-12"
         onDragOver={(e) => e.preventDefault()}
