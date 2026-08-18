@@ -2,7 +2,6 @@ import React from "react";
 import { Section, SectionHeader } from "@/components/shared/section/section";
 import { SearchParams } from "@/types/search-params";
 import { TableSkeleton } from "@/components/shared/skeleton/table";
-import { getBlogs } from "@/features/blog/lib/blog";
 import { ErrorBoundary } from "@/components/shared/boundary/error-boundary";
 import PagePagination from "@/components/shared/pagination/pagination";
 import MarathonTable from "@/features/marathon/components/table";
