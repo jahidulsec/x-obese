@@ -2,14 +2,22 @@ import React from "react";
 import { AppSidebar } from "@/components/shared/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/shared/sidebar/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { getAuthUser } from "@/lib/dal";
+import { redirect } from "next/navigation";
 
-export default function DashboardLayout({ children }: React.PropsWithChildren) {
+export default async function DashboardLayout({
+  children,
+}: React.PropsWithChildren) {
+  const user = await getAuthUser();
+
+  if (!user) redirect("/login");
+
   return (
     <div className="[--header-height:calc(--spacing(14))]">
       <SidebarProvider className="flex flex-col">
         <SiteHeader />
         <div className="flex flex-1">
-          <AppSidebar />
+          <AppSidebar user={user} />
           <SidebarInset>{children}</SidebarInset>
         </div>
       </SidebarProvider>

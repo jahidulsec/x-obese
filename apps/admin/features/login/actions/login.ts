@@ -26,7 +26,7 @@ export const userLogin = async (data: adminsLoginInputTypes) => {
     await createSession({
       username: res.data.username,
       role: res.data.role,
-      name: res.data.full_name,
+      name: res.data.name,
     });
 
     // store token
