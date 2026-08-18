@@ -3,9 +3,10 @@
 import { DataTable } from "@/components/shared/table/data-table";
 import { DataTableFeatures } from "@/components/shared/table/data-table-features";
 import { createColumnHelper } from "@tanstack/react-table";
-import { MarathonLeadboardMultiProps } from "@/types/leadboard";
+import { MarathonLeadboardMultiProps } from "@/types/leaderboard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { timeConversion } from "@/utils/formatter";
+import React from "react";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const columnHelper = createColumnHelper<
@@ -57,7 +58,7 @@ export default function MarathonLeadboardTable({
         return <span>{timeConversion(user.durationMs)}</span>;
       },
     }),
-    columnHelper.accessor("submission_count", {
+    columnHelper.accessor("submissionCount", {
       header: "Total Attempt",
     }),
   ]);
