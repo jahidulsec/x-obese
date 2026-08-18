@@ -54,20 +54,43 @@ export function generateSlug(text: string) {
   );
 }
 
-
-
 export const numberToWords = (num: number): string => {
   if (num === 0) return "Zero";
 
   const belowTwenty = [
-    "", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
-    "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
-    "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+    "",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
   ];
 
   const tens = [
-    "", "", "Twenty", "Thirty", "Forty", "Fifty",
-    "Sixty", "Seventy", "Eighty", "Ninety"
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety",
   ];
 
   const thousands = ["", "Thousand", "Million", "Billion"];
@@ -75,13 +98,8 @@ export const numberToWords = (num: number): string => {
   const helper = (n: number): string => {
     if (n === 0) return "";
     if (n < 20) return belowTwenty[n] + " ";
-    if (n < 100)
-      return tens[Math.floor(n / 10)] + " " + helper(n % 10);
-    return (
-      belowTwenty[Math.floor(n / 100)] +
-      " Hundred " +
-      helper(n % 100)
-    );
+    if (n < 100) return tens[Math.floor(n / 10)] + " " + helper(n % 10);
+    return belowTwenty[Math.floor(n / 100)] + " Hundred " + helper(n % 100);
   };
 
   let word = "";
@@ -96,4 +114,16 @@ export const numberToWords = (num: number): string => {
   }
 
   return word.trim();
+};
+
+export const timeConversion = (milliseconds: number) => {
+  if (!milliseconds) return 0;
+  const seconds = Math.floor((milliseconds / 1000) % 60);
+  const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
+  const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+
+  let time = hours !== 0 ? `${hours}h` : ``;
+  time += minutes !== 0 ? ` ${minutes}m` : ``;
+  time += ` ${seconds}s`;
+  return time;
 };

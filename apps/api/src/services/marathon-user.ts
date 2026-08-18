@@ -9,51 +9,81 @@ import type {
 const getMulti = async (queries: marathonUsersQueryInputTypes) => {
   const size = queries?.size ?? 20;
   const page = queries?.page ?? 1;
-  const sort = queries?.sort ?? "desc";
   const marathonId = queries?.marathonId;
 
-  const [data, count] = await Promise.all([
-    prisma.marathonUser.findMany({
-      where: {
-        user: {
-          fullName: {
-            startsWith: queries.search || undefined,
-          },
-        },
-        marathonId: marathonId,
-      },
-      include: {
-        user: {
-          select: {
-            fullName: true,
-            image: true,
-          },
-        },
-      },
-      take: size,
-      skip: size * (page - 1),
-      orderBy: [
-        {
-          distanceKm: sort,
-        },
-        {
-          durationMs: "asc",
-        },
-      ],
-    }),
-    prisma.marathonUser.count({
-      where: {
-        user: {
-          fullName: {
-            startsWith: queries.search || undefined,
-          },
-        },
-        marathonId: marathonId,
-      },
-    }),
-  ]);
+  const offset = size * (page - 1);
+  const search = queries?.search ?? "";
 
-  return { data, count, page, size };
+  const data = await prisma.$queryRaw<
+    {
+      id: string;
+      marathonId: string;
+      distanceKm: number;
+      durationMs: number;
+      submission_count: number;
+      fullName: string;
+      image: string | null;
+      rank: bigint;
+    }[]
+  >`
+    SELECT *
+    FROM (
+      SELECT
+        mu.id,
+        mu.marathon_id AS marathonId,
+        mu.distance_km AS distanceKm,
+        mu.duration_ms AS durationMs,
+        mu.submission_count AS submission_count,
+
+        u.full_name AS fullName,
+        u.image,
+
+        RANK() OVER (
+          ORDER BY
+            mu.distance_km DESC,
+            mu.duration_ms ASC
+        ) AS rank
+
+      FROM marathon_user mu
+      INNER JOIN user u
+        ON u.id = mu.user_id
+
+      WHERE
+        mu.marathon_id = ${marathonId}
+        AND (
+          ${search} = ''
+          OR u.full_name LIKE CONCAT(${search}, '%')
+        )
+    ) ranked
+
+    ORDER BY
+      distanceKm DESC,
+      durationMs ASC
+
+    LIMIT ${size}
+    OFFSET ${offset}
+  `;
+
+  const count = await prisma.marathonUser.count({
+    where: {
+      marathonId,
+      user: {
+        fullName: {
+          startsWith: queries.search || undefined,
+        },
+      },
+    },
+  });
+
+  return {
+    data: data.map((item) => ({
+      ...item,
+      rank: Number(item.rank),
+    })),
+    count,
+    page,
+    size,
+  };
 };
 
 const getSingle = async (idObj: requiredIdTypes) => {

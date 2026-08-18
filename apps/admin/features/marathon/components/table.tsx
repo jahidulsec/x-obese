@@ -74,7 +74,7 @@ export default function MarathonTable({ data }: { data: Marathon[] }) {
             <TableActionButton
               tooltip="Leaderboard"
               variant={"edit"}
-              onClick={() => router.push(`/dashboard/marathon/${value.id}`)}
+              onClick={() => router.push(`/dashboard/marathon/${value.id}/leaderboard`)}
             >
               <Podium /> <span className="sr-only">Leaderboard</span>
             </TableActionButton>

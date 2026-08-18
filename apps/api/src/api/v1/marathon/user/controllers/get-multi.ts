@@ -26,12 +26,7 @@ getMarathonUsers.get(
         data: data.data.map((item) => {
           return {
             ...item,
-            user: {
-              fullName: item.user.fullName,
-              imagePath: item.user.image
-                ? generateFileLink(c, item.user.image)
-                : null,
-            },
+            imagePath: item.image ? generateFileLink(c, item.image) : null,
           };
         }),
         count: data.count,
