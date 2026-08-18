@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { jwtMiddleware } from "../../../../../middlewares/jwt.ts";
 import { verifyRoles } from "../../../../../middlewares/verify-roles.ts";
-import type { AuthUser } from "../../../../../types/auth.ts";
 import { validator } from "hono/validator";
 import { createMarathonDTOSchema } from "@repo/validator";
 import { ErrorFactory } from "../../../../../utils/error.ts";
@@ -21,8 +20,6 @@ createMarathon.post(
   }),
   async (c) => {
     let createdFileName: string | undefined;
-
-    const authUser = c.get("jwtPayload") as AuthUser;
 
     const { reward, imagePath, ...validatedData } = c.req.valid("form");
 

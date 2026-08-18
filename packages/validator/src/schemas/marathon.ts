@@ -30,19 +30,33 @@ export const createMarathonDTOSchema = z.object({
 
   type: z.enum(["onsite", "virtual"]),
 
-  ageRule: z
-    .array(
-      createMarathonAgeRuleDTOSchema
-        .omit({ marathonId: true })
-        .refine(
-          (data) => data.ageMin !== undefined || data.ageMax !== undefined,
-          {
-            message: "Age minimum or age maximum is required",
-            path: ["ageMin"],
-          },
-        ),
-    )
-    .optional(),
+  ageRule: z.preprocess(
+    (value) => {
+      // multipart form data sends the array as a JSON string
+      if (typeof value === "string") {
+        try {
+          return JSON.parse(value);
+        } catch {
+          return value;
+        }
+      }
+      return value;
+    },
+    z
+      .array(
+        createMarathonAgeRuleDTOSchema
+          .extend({ ageRuleId: z.string().optional() })
+          .omit({ marathonId: true })
+          .refine(
+            (data) => data.ageMin !== undefined || data.ageMax !== undefined,
+            {
+              message: "Age minimum or age maximum is required",
+              path: ["ageMin"],
+            },
+          ),
+      )
+      .optional(),
+  ),
 });
 
 export const updateMarathonDTOSchema = createMarathonDTOSchema

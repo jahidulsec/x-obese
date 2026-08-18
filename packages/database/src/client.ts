@@ -17,7 +17,7 @@ export const prisma =
   new PrismaClient({
     adapter,
     // Optional: Log queries to see if connection works
-    log: ["query", "info", "warn", "error"],
+    // log: ["query", "info", "warn", "error"],
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

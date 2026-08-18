@@ -64,3 +64,38 @@ export const deleteMarathon = async (id: string) => {
     return apiResponse.error(error);
   }
 };
+
+export const deleteMarathonReward = async (id: string) => {
+  try {
+    const res = await api.fetchWithAuth(
+      `/api/marathon/v1/marathon/reward/${id}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    updateTag("marathon");
+
+    return apiResponse.success(res);
+  } catch (error) {
+    return apiResponse.error(error);
+  }
+};
+
+
+export const deleteMarathonAgeRule = async (id: string) => {
+  try {
+    const res = await api.fetchWithAuth(
+      `/api/marathon/v1/marathon/age-rule/${id}`,
+      {
+        method: "DELETE",
+      },
+    );
+
+    updateTag("marathon");
+
+    return apiResponse.success(res);
+  } catch (error) {
+    return apiResponse.error(error);
+  }
+};

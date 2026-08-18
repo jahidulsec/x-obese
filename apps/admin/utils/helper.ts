@@ -22,6 +22,23 @@ export const convertIntoFormData = (data: Record<string, any>): FormData => {
 
     // Array
     if (Array.isArray(value)) {
+      const isObjectArray = value.some(
+        (item) =>
+          item !== null &&
+          typeof item === "object" &&
+          !(item instanceof File) &&
+          !(item instanceof Blob) &&
+          !(item instanceof Date),
+      );
+
+      // Arrays of objects can't be represented with bracket notation since
+      // the API's form parser only groups `key[]` into arrays of raw values
+      // and doesn't reconstruct nested objects from bracket paths.
+      if (isObjectArray) {
+        formData.append(key, JSON.stringify(value));
+        return;
+      }
+
       value.forEach((item) => {
         appendValue(`${key}[]`, item);
       });

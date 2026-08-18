@@ -6,26 +6,26 @@ import {
 } from "@/components/shared/table/data-table";
 import { DataTableFeatures } from "@/components/shared/table/data-table-features";
 import { formatDate, formatDateTime } from "@/utils/formatter";
-import { Marathon, MarathonType } from "@repo/database";
+import { Marathon } from "@repo/database";
 import { createColumnHelper } from "@tanstack/react-table";
 import React from "react";
 import { TableActionButton } from "@/components/shared/button/button";
-import { Edit2, ListStart, Podium, Trash2 } from "lucide-react";
+import { Edit2, Podium, Trash2 } from "lucide-react";
 import AlertModal from "@/components/shared/alert-dialog/alert-dialog";
 import { deleteToastTemplate } from "@/lib/template";
-import { FormSheet } from "@/components/shared/sheet/sheet";
-import { toast } from "sonner";
 import { deleteMarathon } from "../actions/marathon";
 import { MarathonTypeBadge } from "./badge";
+import { useRouter } from "@bprogress/next";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const columnHelper = createColumnHelper<DataTableFeatures, Marathon>();
 
 export default function MarathonTable({ data }: { data: Marathon[] }) {
   const serialNo = useTableSerialColumn<Marathon>();
-  const [edit, setEdit] = React.useState<Marathon | boolean>(false);
   const [del, setDel] = React.useState<string | boolean>(false);
   const [pending, startTransition] = React.useTransition();
+
+  const router = useRouter();
 
   const columns = columnHelper.columns([
     serialNo,
@@ -74,14 +74,14 @@ export default function MarathonTable({ data }: { data: Marathon[] }) {
             <TableActionButton
               tooltip="Leaderboard"
               variant={"edit"}
-              onClick={() => setEdit(value)}
+              onClick={() => router.push(`/dashboard/marathon/${value.id}`)}
             >
               <Podium /> <span className="sr-only">Leaderboard</span>
             </TableActionButton>
             <TableActionButton
               tooltip="Edit"
               variant={"edit"}
-              onClick={() => setEdit(value)}
+              onClick={() => router.push(`/dashboard/marathon/${value.id}`)}
             >
               <Edit2 /> <span className="sr-only">Edit</span>
             </TableActionButton>
@@ -102,17 +102,6 @@ export default function MarathonTable({ data }: { data: Marathon[] }) {
   return (
     <>
       <DataTable data={data} columns={columns} />
-
-      <FormSheet open={!!edit} onOpenChange={setEdit} formTitle="Edit Banner">
-        {/* <BannerForm
-          prevData={typeof edit !== "boolean" ? edit : undefined}
-          onError={(message) => toast.error(message)}
-          onSuccess={(message) => {
-            toast.success(message);
-            setEdit(false);
-          }}
-        /> */}
-      </FormSheet>
 
       <AlertModal
         onOpenChange={setDel}

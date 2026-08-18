@@ -30,3 +30,20 @@ export const getMarathons = async (query: marathonsQueryInputTypes) => {
     return apiResponse.error(error);
   }
 };
+
+
+export const getMarathon = async (id: string) => {
+  try {
+    // get data
+    const res = await api.fetchData(`/api/marathon/v1/marathon/${id}`, {
+      next: {
+        tags: ["marathon", id],
+        revalidate: 5 * 60,
+      },
+    });
+
+    return apiResponse.success(res);
+  } catch (error) {
+    return apiResponse.error(error);
+  }
+};

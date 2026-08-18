@@ -7,6 +7,9 @@ import PagePagination from "@/components/shared/pagination/pagination";
 import MarathonTable from "@/features/marathon/components/table";
 import { PageHeading } from "@/components/shared/typography/heading";
 import { getMarathons } from "@/features/marathon/lib/marathon";
+import Link from "next/link";
+import { PlusCircleIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function MarathonPage({
   searchParams,
@@ -19,7 +22,10 @@ export default function MarathonPage({
         <SectionHeader>
           <PageHeading>Marathon</PageHeading>
 
-          {/* <CreateBannerButton /> */}
+          <Button render={<Link href={"/dashboard/marathon/add"} />}>
+            <PlusCircleIcon />
+            Marathon
+          </Button>
         </SectionHeader>
       </Section>
 
