@@ -6,7 +6,10 @@ import { TableSkeleton } from "@/components/shared/skeleton/table";
 import { PageHeading } from "@/components/shared/typography/heading";
 import MarathonLeadboardTable from "@/features/marathon/components/laederboard-table";
 import { getMarathonUsers } from "@/features/marathon/lib/leaderboard";
+import { getMarathon } from "@/features/marathon/lib/marathon";
 import { Params, SearchParams } from "@/types/search-params";
+import { Marathon } from "@repo/database";
+import { notFound } from "next/navigation";
 import React from "react";
 
 export default function MarathonLeadboardPage({
@@ -20,7 +23,8 @@ export default function MarathonLeadboardPage({
     <div className="flex flex-col gap-8 my-6 ">
       <Section>
         <BackButton href="/dashboard/marathon" />
-        <PageHeading className="mt-3">Marathon Leaderboard</PageHeading>
+        <p>Marathon Leadboard</p>
+        <TitleContainer params={params} />
       </Section>
 
       <Section className="flex flex-col gap-4">
@@ -59,4 +63,14 @@ const DataTable = async ({
       />
     </ErrorBoundary>
   );
+};
+
+const TitleContainer = async ({ params }: { params: Params }) => {
+  const { id } = await params;
+
+  const res = await getMarathon(id?.toString() ?? "");
+
+  if (!res.success || !res.data) return notFound();
+
+  return <PageHeading>{(res.data as Marathon)?.title}</PageHeading>;
 };

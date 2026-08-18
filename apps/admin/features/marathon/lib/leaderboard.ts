@@ -15,11 +15,11 @@ export const getMarathonUsers = async (query: marathonUsersQueryInputTypes) => {
 
     const searchParams = generateCleanQueryParams(validatedParams);
 
-    const res = await api.fetchWithAuth(
+    const res = await api.fetchData(
       `/api/marathon/v1/user?${searchParams.toString()}`,
       {
         next: {
-          tags: ["marathon"],
+          tags: ["marathon-user"],
         },
       },
     );

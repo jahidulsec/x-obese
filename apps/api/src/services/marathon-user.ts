@@ -1,4 +1,4 @@
-import { prisma } from "@repo/database";
+import { Prisma, prisma } from "@repo/database";
 import type {
   createMarathonUserInputsTypes,
   marathonUsersQueryInputTypes,
@@ -10,9 +10,13 @@ const getMulti = async (queries: marathonUsersQueryInputTypes) => {
   const size = queries?.size ?? 20;
   const page = queries?.page ?? 1;
   const marathonId = queries?.marathonId;
+  const search = queries?.search ?? "";
 
   const offset = size * (page - 1);
-  const search = queries?.search ?? "";
+
+  const searchFilter = search
+    ? Prisma.sql`AND u.full_name LIKE ${`%${search}%`}`
+    : Prisma.empty;
 
   const data = await prisma.$queryRaw<
     {
@@ -20,12 +24,12 @@ const getMulti = async (queries: marathonUsersQueryInputTypes) => {
       marathonId: string;
       distanceKm: number;
       durationMs: number;
-      submission_count: number;
+      submissionCount: number;
       fullName: string;
       image: string | null;
       rank: bigint;
     }[]
-  >`
+  >(Prisma.sql`
     SELECT *
     FROM (
       SELECT
@@ -33,7 +37,7 @@ const getMulti = async (queries: marathonUsersQueryInputTypes) => {
         mu.marathon_id AS marathonId,
         mu.distance_km AS distanceKm,
         mu.duration_ms AS durationMs,
-        mu.submission_count AS submission_count,
+        mu.submission_count AS submissionCount,
 
         u.full_name AS fullName,
         u.image,
@@ -45,15 +49,13 @@ const getMulti = async (queries: marathonUsersQueryInputTypes) => {
         ) AS rank
 
       FROM marathon_user mu
-      INNER JOIN user u
+      INNER JOIN users u
         ON u.id = mu.user_id
 
       WHERE
         mu.marathon_id = ${marathonId}
-        AND (
-          ${search} = ''
-          OR u.full_name LIKE CONCAT(${search}, '%')
-        )
+        ${searchFilter}
+
     ) ranked
 
     ORDER BY
@@ -62,16 +64,18 @@ const getMulti = async (queries: marathonUsersQueryInputTypes) => {
 
     LIMIT ${size}
     OFFSET ${offset}
-  `;
+  `);
 
   const count = await prisma.marathonUser.count({
     where: {
       marathonId,
-      user: {
-        fullName: {
-          startsWith: queries.search || undefined,
-        },
-      },
+      user: search
+        ? {
+            fullName: {
+              contains: search,
+            },
+          }
+        : undefined,
     },
   });
 
