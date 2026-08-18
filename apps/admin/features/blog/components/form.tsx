@@ -2,7 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Blogs } from "@repo/database";
-import { createBlogDTOSchema, createBlogInputsTypes } from "@repo/validator";
+import {
+  createBlogDTOSchema,
+  createBlogInputsTypes,
+  updateBlogDTOSchema,
+} from "@repo/validator";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { createBlog, updateBlog } from "../actions/blog";
@@ -19,6 +23,7 @@ import { FormButton } from "@/components/shared/button/button";
 import dynamic from "next/dynamic";
 import { useRouter } from "@bprogress/next";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const Editor = dynamic(() => import("@/components/shared/editor/editor"), {
   ssr: false,
@@ -32,7 +37,9 @@ export default function BlogForm({
   className?: string;
 }) {
   const form = useForm<any>({
-    resolver: zodResolver(createBlogDTOSchema),
+    resolver: zodResolver(
+      prevData?.id ? updateBlogDTOSchema : createBlogDTOSchema,
+    ),
     defaultValues: {
       title: prevData?.title,
       description: prevData?.description,
@@ -43,7 +50,7 @@ export default function BlogForm({
 
   const router = useRouter();
 
-  async function onSubmit(data: createBlogInputsTypes) {
+  async function onSubmit(data: any) {
     const res = prevData?.id
       ? await updateBlog(prevData.id, data)
       : await createBlog(data);
@@ -111,6 +118,18 @@ export default function BlogForm({
                 maxSizeMB={0.7}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+
+              {prevData?.imagePath && (
+                <div className="relative w-full h-80 bg-muted rounded-xl overflow-hidden">
+                  <Image
+                    fill
+                    src={prevData?.imagePath}
+                    alt="image"
+                    objectFit="cover"
+                    unoptimized
+                  />
+                </div>
+              )}
             </Field>
           )}
         />

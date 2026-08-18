@@ -24,3 +24,19 @@ export const getBlogs = async (query: blogsQueryInputTypes) => {
     return apiResponse.error(error);
   }
 };
+
+export const getBlog = async (id: string) => {
+  try {
+    // get data
+    const res = await api.fetchData(`/api/other/v1/blog/${id}`, {
+      next: {
+        tags: ["blog", id],
+        revalidate: 5 * 60,
+      },
+    });
+
+    return apiResponse.success(res);
+  } catch (error) {
+    return apiResponse.error(error);
+  }
+};

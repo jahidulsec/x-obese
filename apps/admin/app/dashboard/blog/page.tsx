@@ -44,7 +44,7 @@ const DataTable = async ({ searchParams }: { searchParams: SearchParams }) => {
     page: Number(page?.toString() || 1),
     size: Number(size || 20),
     search: search?.toString(),
-    sort: "asc",
+    sort: "desc",
   });
 
   return (

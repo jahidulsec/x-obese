@@ -14,15 +14,17 @@ import { Edit2, Trash2 } from "lucide-react";
 import AlertModal from "@/components/shared/alert-dialog/alert-dialog";
 import { deleteToastTemplate } from "@/lib/template";
 import { deleteBlog } from "../actions/blog";
+import { useRouter } from "@bprogress/next";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const columnHelper = createColumnHelper<DataTableFeatures, Blogs>();
 
 export default function BlogTable({ data }: { data: Blogs[] }) {
   const serialNo = useTableSerialColumn<Blogs>();
-  const [edit, setEdit] = React.useState<Blogs | boolean>(false);
   const [del, setDel] = React.useState<string | boolean>(false);
   const [pending, startTransition] = React.useTransition();
+
+  const router = useRouter();
 
   const columns = columnHelper.columns([
     serialNo,
@@ -51,7 +53,7 @@ export default function BlogTable({ data }: { data: Blogs[] }) {
             <TableActionButton
               tooltip="Edit"
               variant={"edit"}
-              onClick={() => setEdit(value)}
+              onClick={() => router.push("/dashboard/blog/" + value.id)}
             >
               <Edit2 /> <span className="sr-only">Edit</span>
             </TableActionButton>
