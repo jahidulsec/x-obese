@@ -2,6 +2,7 @@ import { ErrorBoundary } from "@/components/shared/boundary/error-boundary";
 import PagePagination from "@/components/shared/pagination/pagination";
 import { Section, SectionHeader } from "@/components/shared/section/section";
 import { TableSkeleton } from "@/components/shared/skeleton/table";
+import { PageHeading } from "@/components/shared/typography/heading";
 import CreateBannerButton from "@/features/banner/components/create-button";
 import BannerTable from "@/features/banner/components/table";
 import { getBanners } from "@/features/banner/lib/banner";
@@ -17,7 +18,7 @@ export default function BannerPage({
     <div className="flex flex-col gap-8 my-6">
       <Section>
         <SectionHeader>
-          <h1 className="text-2xl font-semibold font-heading">Banner</h1>
+          <PageHeading>Banner</PageHeading>
 
           <CreateBannerButton />
         </SectionHeader>

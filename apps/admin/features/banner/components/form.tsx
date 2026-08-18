@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/field";
 import { Banner } from "@repo/database";
 import { Input } from "@/components/ui/input";
-import FileUpload from "@/components/file-upload-04";
+import FileUpload from "@/components/ui/file-upload-04";
 import { FormButton } from "@/components/shared/button/button";
 
 export default function BannerForm({

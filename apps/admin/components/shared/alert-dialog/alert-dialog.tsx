@@ -15,7 +15,7 @@ export default function AlertModal({
   onAction,
   ...props
 }: AlertDialogRootProps & {
-  onAction: () => void;
+  onAction?: () => void;
 }) {
   return (
     <AlertDialog {...props}>

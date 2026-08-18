@@ -6,11 +6,13 @@ import { getMarathonStats } from "./controllers/get-stats.ts";
 import { deleteMarathon } from "./controllers/delete.ts";
 import { updateMarathon } from "./controllers/update.ts";
 import { marathonAgeRuleRouter } from "./age-rule/index.ts";
+import { getMarathons } from "./controllers/get-multi.ts";
 
 const mMarathonRouter = new Hono();
 
 mMarathonRouter.route("/", createMarathon);
-mMarathonRouter.route("/", getMarathon);
+mMarathonRouter.route("/", getMarathons);
+mMarathonRouter.route("/:id", getMarathon);
 mMarathonRouter.route("/", getMarathonStats);
 mMarathonRouter.route("/:id", deleteMarathon);
 mMarathonRouter.route("/:id", updateMarathon);

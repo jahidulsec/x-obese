@@ -5,45 +5,54 @@ import {
   useTableSerialColumn,
 } from "@/components/shared/table/data-table";
 import { DataTableFeatures } from "@/components/shared/table/data-table-features";
-import { formatDate } from "@/utils/formatter";
-import { Banner } from "@repo/database";
+import { formatDate, formatDateTime } from "@/utils/formatter";
+import { Marathon, MarathonType } from "@repo/database";
 import { createColumnHelper } from "@tanstack/react-table";
 import React from "react";
 import { TableActionButton } from "@/components/shared/button/button";
-import { Edit2, Trash2 } from "lucide-react";
+import { Edit2, ListStart, Podium, Trash2 } from "lucide-react";
 import AlertModal from "@/components/shared/alert-dialog/alert-dialog";
 import { deleteToastTemplate } from "@/lib/template";
-import { deleteBanner } from "../actions/banner";
 import { FormSheet } from "@/components/shared/sheet/sheet";
-import BannerForm from "./form";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { deleteMarathon } from "../actions/marathon";
+import { MarathonTypeBadge } from "./badge";
 
 // Use `accessor` for data columns and `display` for columns without one.
-const columnHelper = createColumnHelper<DataTableFeatures, Banner>();
+const columnHelper = createColumnHelper<DataTableFeatures, Marathon>();
 
-export default function BannerTable({ data }: { data: Banner[] }) {
-  const serialNo = useTableSerialColumn<Banner>();
-  const [edit, setEdit] = React.useState<Banner | boolean>(false);
+export default function MarathonTable({ data }: { data: Marathon[] }) {
+  const serialNo = useTableSerialColumn<Marathon>();
+  const [edit, setEdit] = React.useState<Marathon | boolean>(false);
   const [del, setDel] = React.useState<string | boolean>(false);
   const [pending, startTransition] = React.useTransition();
 
   const columns = columnHelper.columns([
     serialNo,
-    columnHelper.accessor("imagePath", {
-      id: "Image",
-      header: "",
-      size: 32,
-      cell: ({ row }) => (
-        <Avatar size="lg">
-          <AvatarImage className={"rounded-md"} src={row.original.imagePath} />
-          <AvatarFallback>{row.original.title.charAt(0)}</AvatarFallback>
-        </Avatar>
-      ),
-    }),
     columnHelper.accessor("title", {
       header: "Title",
-      size: 1000,
+      size: 400,
+    }),
+    columnHelper.accessor("type", {
+      header: "Type",
+      cell: ({ row }) => <MarathonTypeBadge type={row.getValue("type")} />,
+    }),
+    columnHelper.accessor("distanceKm", {
+      header: "Distance (KM)",
+    }),
+    columnHelper.accessor("startDate", {
+      header: "Start From",
+      cell: ({ row }) => (
+        <p className="text-sm">{formatDateTime(row.getValue("startDate"))}</p>
+      ),
+      size: 10,
+    }),
+    columnHelper.accessor("endDate", {
+      header: "Ends At",
+      cell: ({ row }) => (
+        <p className="text-sm">{formatDateTime(row.getValue("endDate"))}</p>
+      ),
+      size: 10,
     }),
     columnHelper.accessor("createdAt", {
       header: "Created At",
@@ -62,6 +71,13 @@ export default function BannerTable({ data }: { data: Banner[] }) {
 
         return (
           <div className="flex justify-end items-center gap-1">
+            <TableActionButton
+              tooltip="Leaderboard"
+              variant={"edit"}
+              onClick={() => setEdit(value)}
+            >
+              <Podium /> <span className="sr-only">Leaderboard</span>
+            </TableActionButton>
             <TableActionButton
               tooltip="Edit"
               variant={"edit"}
@@ -88,14 +104,14 @@ export default function BannerTable({ data }: { data: Banner[] }) {
       <DataTable data={data} columns={columns} />
 
       <FormSheet open={!!edit} onOpenChange={setEdit} formTitle="Edit Banner">
-        <BannerForm
+        {/* <BannerForm
           prevData={typeof edit !== "boolean" ? edit : undefined}
           onError={(message) => toast.error(message)}
           onSuccess={(message) => {
             toast.success(message);
             setEdit(false);
           }}
-        />
+        /> */}
       </FormSheet>
 
       <AlertModal
@@ -105,7 +121,7 @@ export default function BannerTable({ data }: { data: Banner[] }) {
           const id = typeof del !== "boolean" ? del : "";
 
           startTransition(() => {
-            deleteToastTemplate(() => deleteBanner(id));
+            deleteToastTemplate(() => deleteMarathon(id));
           });
 
           setDel(false);
