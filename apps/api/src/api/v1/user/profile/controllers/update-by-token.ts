@@ -9,6 +9,7 @@ import {
   generateFileLink,
   saveFileToStorage,
 } from "../../../../../utils/file.ts";
+import { apiResponse } from "../../../../../libs/response.ts";
 
 const updateUserByToken = new Hono();
 
@@ -57,7 +58,6 @@ updateUserByToken.patch(
     }
 
     const responseData = {
-      success: true,
       message: "User profile updated successfully!",
       data: {
         ...updated,
@@ -66,6 +66,8 @@ updateUserByToken.patch(
         }),
       },
     };
+
+    return c.json(apiResponse.single(responseData));
   },
 );
 
