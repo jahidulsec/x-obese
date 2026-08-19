@@ -62,8 +62,7 @@ const getMulti = async (queries: marathonUsersQueryInputTypes) => {
       distanceKm DESC,
       durationMs ASC
 
-    LIMIT ${size}
-    OFFSET ${offset}
+    LIMIT ${offset},${size}
   `);
 
   const count = await prisma.marathonUser.count({

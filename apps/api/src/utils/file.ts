@@ -5,6 +5,10 @@ import fsSync from "fs";
 import { storageFolderName } from "../libs/data.js";
 
 export const generateFileLink = (c: Context, filePath: string) => {
+  if (filePath.startsWith("http")) {
+    return filePath;
+  }
+
   const url = new URL(c.req.url);
 
   const protocol =

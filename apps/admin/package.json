@@ -6,7 +6,8 @@
     "dev": "next dev -p 6057",
     "build": "next build",
     "start": "next start -p 6057",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
