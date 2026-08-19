@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   description: "A fitness app",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
