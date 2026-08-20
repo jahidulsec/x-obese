@@ -65,10 +65,10 @@ updateMarathonUser.patch(
     }
 
     //update with validated data
-    const updated = await marathonUserService.updateOne(
-      validatedId,
-      validatedData,
-    );
+    const updated = await marathonUserService.updateOne(validatedId, {
+      ...validatedData,
+      submissionCount: (existingMarathonUser.submissionCount || 0) + 1,
+    });
 
     if (!updated) {
       throw ErrorFactory.create("INTERNAL", "Marathon user is not updated");
