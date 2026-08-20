@@ -13,7 +13,7 @@ marathonUserRouter.route("/", getMarathonUsers);
 
 marathonUserRouter.use(jwtMiddleware);
 marathonUserRouter.route("/", createMarathonUser);
-marathonUserRouter.route("/", updateMarathonUser);
+marathonUserRouter.route("/:id", updateMarathonUser);
 marathonUserRouter.route("/:id", getMarathonUser);
 marathonUserRouter.route("/:id/leaderboard", getMarathonUserLeadboard);
 marathonUserRouter.route("/:id", deleteMarathonUser);
