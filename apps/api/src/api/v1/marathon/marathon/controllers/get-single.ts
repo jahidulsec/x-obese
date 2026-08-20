@@ -31,7 +31,9 @@ getMarathon.get(
       throw ErrorFactory.create("NOT_FOUND", "Marathon not found!");
     }
 
+    console.log(authUser)
     if (authUser?.role === "user") {
+
       //get single item with validated id
       const userMarathon = await marathonService.getSingleByUserId(
         validatedData,

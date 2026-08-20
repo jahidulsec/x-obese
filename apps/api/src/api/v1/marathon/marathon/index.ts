@@ -7,13 +7,18 @@ import { deleteMarathon } from "./controllers/delete.ts";
 import { updateMarathon } from "./controllers/update.ts";
 import { marathonAgeRuleRouter } from "./age-rule/index.ts";
 import { getMarathons } from "./controllers/get-multi.ts";
+import { jwtMiddleware } from "../../../../middlewares/jwt.ts";
+import { verifyRoles } from "../../../../middlewares/verify-roles.ts";
 
 const mMarathonRouter = new Hono();
 
-mMarathonRouter.route("/", createMarathon);
+mMarathonRouter.use(jwtMiddleware);
 mMarathonRouter.route("/", getMarathons);
 mMarathonRouter.route("/:id", getMarathon);
 mMarathonRouter.route("/", getMarathonStats);
+
+mMarathonRouter.use(verifyRoles("superadmin", "admin"));
+mMarathonRouter.route("/", createMarathon);
 mMarathonRouter.route("/:id", deleteMarathon);
 mMarathonRouter.route("/:id", updateMarathon);
 

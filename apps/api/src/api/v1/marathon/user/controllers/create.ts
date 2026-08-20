@@ -6,7 +6,7 @@ import * as userService from "../../../../../services/user-profile.ts";
 import type { AuthUser } from "../../../../../types/auth.ts";
 import { ErrorFactory } from "../../../../../utils/error.ts";
 import { apiResponse } from "../../../../../libs/response.ts";
-import { jwtMiddleware } from "../../../../../middlewares/jwt.ts";
+
 
 const createMarathonUser = new Hono();
 
