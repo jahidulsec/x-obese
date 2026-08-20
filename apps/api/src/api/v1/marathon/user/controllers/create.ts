@@ -13,7 +13,9 @@ const createMarathonUser = new Hono();
 createMarathonUser.post(
   "/",
   validator("json", (value) => {
-    const parsed = createMarathonUserDTOSchema.parse(value);
+    const parsed = createMarathonUserDTOSchema
+      .partial({ userId: true })
+      .parse(value);
     return parsed;
   }),
   async (c) => {
@@ -32,11 +34,9 @@ createMarathonUser.post(
       throw ErrorFactory.create("NOT_FOUND", "User does not exist");
     }
 
-    validatedData.userId = authUser?.id as string;
-
     // check if user already joined
     const isJoined = await marathonService.checkUserInMarathon(
-      validatedData.userId,
+      authUser?.id,
       validatedData.marathonId,
     );
 
@@ -48,7 +48,10 @@ createMarathonUser.post(
     }
 
     // create new with validated data
-    const created = await marathonService.createNew(validatedData);
+    const created = await marathonService.createNew({
+      ...validatedData,
+      userId: authUser.id,
+    });
 
     const responseData = {
       message: "Your are added to this marathon successfully!",
