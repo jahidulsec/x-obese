@@ -35,7 +35,7 @@ export const getMarathons = async (query: marathonsQueryInputTypes) => {
 export const getMarathon = async (id: string) => {
   try {
     // get data
-    const res = await api.fetchData(`/api/marathon/v1/marathon/${id}`, {
+    const res = await api.fetchWithAuth(`/api/marathon/v1/marathon/${id}`, {
       next: {
         tags: ["marathon", id],
         revalidate: 5 * 60,
