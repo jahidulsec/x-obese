@@ -33,5 +33,9 @@ const FormContainer = async ({ params }: { params: Params }) => {
 
   const res = await getMarathon(id?.toString() ?? "");
 
-  return <MarathonForm prevData={{ ...(res?.data as any) }} />;
+  return (
+    <>
+      <MarathonForm prevData={{ ...(res?.data as any) }} />
+    </>
+  );
 };

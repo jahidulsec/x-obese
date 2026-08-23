@@ -15,22 +15,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, PlusCircle, X } from "lucide-react";
 import { deleteToastTemplate } from "@/lib/template";
-import { deleteMarathonAgeRule } from "../actions/marathon";
+import { deleteMarathonDistanceRule } from "../actions/marathon";
 
-export default function AgeRuleForm({
+export default function DistanceRuleForm({
   form,
 }: {
   form: UseFormReturn<createMarathonInputsTypes>;
 }) {
   const { append, remove, fields } = useFieldArray({
     control: form.control,
-    name: "ageRule",
+    name: "distanceRule",
   });
 
   return (
-    <div className="md:col-span-3 border rounded-xl p-4">
+    <div className="md:col-span-3 border rounded-xl p-4 flex flex-col gap-3">
       <div className="flex justify-between items-center gap-5 flex-wrap mb-5">
-        <h2 className="font-medium text-xl">Age Rule</h2>
+        <h2 className="font-medium text-xl">Distance Rule</h2>
 
         <Button
           variant={"outline"}
@@ -38,8 +38,8 @@ export default function AgeRuleForm({
           onClick={() =>
             append({
               distanceKm: 0,
-              ageMax: undefined,
-              ageMin: undefined,
+              attemptNo: 1,
+              description: undefined,
             })
           }
         >
@@ -50,11 +50,11 @@ export default function AgeRuleForm({
 
       {fields.length > 0 ? (
         fields.map((item, index) => (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5" key={index}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 border-b pb-3 last:border-0" key={index}>
             <div className="md:col-span-2 flex items-end">
               <Controller
                 control={form.control}
-                name={`ageRule.${index}.distanceKm`}
+                name={`distanceRule.${index}.distanceKm`}
                 render={({ field, fieldState }) => (
                   <Field>
                     <FieldLabel htmlFor={field.name}>Distance (KM)</FieldLabel>
@@ -78,9 +78,9 @@ export default function AgeRuleForm({
                 size={"icon"}
                 type="button"
                 onClick={() => {
-                  if (item.ageRuleId) {
+                  if (item.distanceRuleId) {
                     deleteToastTemplate(() =>
-                      deleteMarathonAgeRule(item.ageRuleId ?? ""),
+                      deleteMarathonDistanceRule(item.distanceRuleId ?? ""),
                     );
                   }
                   remove(index);
@@ -94,10 +94,10 @@ export default function AgeRuleForm({
 
             <Controller
               control={form.control}
-              name={`ageRule.${index}.ageMin`}
+              name={`distanceRule.${index}.attemptNo`}
               render={({ field, fieldState }) => (
                 <Field>
-                  <FieldLabel htmlFor={field.name}>Age (min)</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Attempt Number</FieldLabel>
                   <Input
                     id={field.name}
                     type="number"
@@ -116,18 +116,18 @@ export default function AgeRuleForm({
 
             <Controller
               control={form.control}
-              name={`ageRule.${index}.ageMax`}
+              name={`distanceRule.${index}.description`}
               render={({ field, fieldState }) => (
                 <Field>
-                  <FieldLabel htmlFor={field.name}>Age (Max)</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Description (optional)
+                  </FieldLabel>
                   <Input
                     id={field.name}
-                    type="number"
-                    placeholder="eg. 5"
+                    placeholder="Write here."
                     aria-invalid={fieldState.invalid}
                     autoComplete="off"
                     {...field}
-                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

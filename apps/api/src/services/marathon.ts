@@ -117,7 +117,7 @@ const getSingle = async (idObj: requiredIdTypes) => {
       where: { id },
       include: {
         Rewards: true,
-        marathoAgeRule: true,
+        MarathonDistance: true,
       },
     }),
     prisma.marathonUser.count({
@@ -241,7 +241,11 @@ const createNew = async (
       ...(info.distanceRule && {
         MarathonDistance: {
           createMany: {
-            data: info.distanceRule,
+            data: info.distanceRule.map((i) => ({
+              distanceKm: i.distanceKm,
+              description: i.description,
+              attemptNo: i.attemptNo,
+            })),
           },
         },
       }),
@@ -284,18 +288,33 @@ const updateOne = async (
           },
         },
       }),
-      ...(info.distanceRule && {
-        MarathonDistance: {
-          createMany: {
-            data: info.distanceRule,
-          },
-        },
-      }),
     },
     include: {
       Rewards: true,
     },
   });
+
+  if (info.distanceRule) {
+    const distanceRule = info.distanceRule;
+
+    for (const i of distanceRule) {
+      await prisma.marathonDistance.upsert({
+        where: { id: i.distanceRuleId },
+        create: {
+          marathonId: updatedData.id,
+          distanceKm: i.distanceKm,
+          attemptNo: i.attemptNo,
+          description: i.description,
+        },
+        update: {
+          distanceKm: i.distanceKm,
+          attemptNo: i.attemptNo,
+          description: i.description,
+        },
+      });
+    }
+  }
+
   return updatedData;
 };
 

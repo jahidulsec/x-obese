@@ -5,33 +5,33 @@ import {
   createMarathonDTOSchema,
   updateMarathonDTOSchema,
 } from "@repo/validator";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { cn } from "@/lib/utils";
-import {
-  FieldGroup,
-  Field,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import FileUpload from "@/components/ui/file-upload-04";
-import { FormButton } from "@/components/shared/button/button";
 import dynamic from "next/dynamic";
 import { useRouter } from "@bprogress/next";
 import { toast } from "sonner";
-import Image from "next/image";
 import {
   createMarathon,
   deleteMarathonReward,
   updateMarathon,
 } from "../actions/marathon";
+import { MarathonProps } from "@/types/marathon";
+import { cn } from "@/lib/utils";
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+  FieldGroup,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { Select } from "@/components/shared/select/select";
 import { DatePickerTime } from "@/components/shared/date-picker/date-time-picker";
-import { MarathonProps } from "@/types/marathon";
 import RewardSection from "./reward-section";
 import { MultiInput } from "@/components/shared/inputs/mulit-input";
-import AgeRuleForm from "./age-rule-form";
+import FileUpload from "@/components/ui/file-upload-04";
+import Image from "next/image";
+import DistanceRuleForm from "./distance-rule-form";
+import { FormButton } from "@/components/shared/button/button";
+import React from "react";
 
 const Editor = dynamic(() => import("@/components/shared/editor/editor"), {
   ssr: false,
@@ -57,11 +57,11 @@ export default function MarathonForm({
       type: prevData?.type,
       description: prevData?.description,
       distanceKm: prevData?.distanceKm,
-      ageRule: prevData?.marathoAgeRule?.map((i) => ({
+      distanceRule: prevData?.MarathonDistance?.map((i) => ({
         distanceKm: i.distanceKm,
-        ageMin: i.ageMin,
-        ageMax: i.ageMax,
-        ageRuleId: i.id,
+        attemptNo: i.attemptNo,
+        description: i.description,
+        distanceRuleId: i.id,
       })),
     },
   });
@@ -69,6 +69,8 @@ export default function MarathonForm({
   const router = useRouter();
 
   const type = form.watch("type");
+  const startDate = form.watch("startDate");
+  const endDate = form.watch("endDate");
 
   async function onSubmit(data: any) {
     const res = prevData?.id
@@ -77,22 +79,44 @@ export default function MarathonForm({
 
     toast[res.success ? "success" : "error"](res.message);
     if (res.success) {
-      // router.push("/dashboard/marathon");
+      router.push("/dashboard/marathon");
     }
   }
 
-  const isDisabled = (date: Date) => {
-    // Normalize today's date
+  const isStartDisabled = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Calculate min date = today + 5 working days
     const minDate = new Date(today);
-    let addedDays = 0;
+    minDate.setDate(minDate.getDate() + 1);
 
-    while (addedDays < 1) {
-      minDate.setDate(minDate.getDate() + 1);
-      addedDays++;
+    if (endDate) {
+      const end = new Date(endDate);
+      end.setHours(0, 0, 0, 0);
+
+      if (date > end) return true;
+    }
+
+    return date < minDate;
+  };
+
+  const isEndDisabled = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 1);
+
+    if (startDate) {
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+
+      console.log("date - ", date.toISOString())
+      console.log('start - ',start.toISOString())
+      console.log(date < start)
+
+      // End must be after start
+      if (date < start) return true;
     }
 
     return date < minDate;
@@ -127,7 +151,7 @@ export default function MarathonForm({
           name="distanceKm"
           render={({ field, fieldState }) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Distance (KM)</FieldLabel>
+              <FieldLabel htmlFor={field.name}>Max. Distance (KM)</FieldLabel>
               <Input
                 id={field.name}
                 type="number"
@@ -182,7 +206,7 @@ export default function MarathonForm({
               <DatePickerTime
                 defaultValue={prevData?.startDate}
                 onValueChange={(value) => field.onChange(value)}
-                disabled={isDisabled}
+                disabled={isStartDisabled}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -198,7 +222,7 @@ export default function MarathonForm({
               <DatePickerTime
                 defaultValue={prevData?.startDate}
                 onValueChange={(value) => field.onChange(value)}
-                disabled={isDisabled}
+                disabled={isEndDisabled}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -332,7 +356,7 @@ export default function MarathonForm({
             </Field>
           )}
         />
-        {type === "virtual" && <AgeRuleForm form={form} />}
+        {type === "virtual" && <DistanceRuleForm form={form} />}
 
         <FormButton className={"md:col-span-3 max-w-[15rem] w-full"}>
           Submit

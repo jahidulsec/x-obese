@@ -30,9 +30,26 @@ export const createMarathonDTOSchema = z.object({
 
   type: z.enum(["onsite", "virtual"]),
 
-  distanceRule: z
-    .array(createMarathonDistanceDTOSchema.omit({ marathonId: true }))
-    .optional(),
+  distanceRule: z.preprocess(
+    (value) => {
+      // multipart form data sends the array as a JSON string
+      if (typeof value === "string") {
+        try {
+          return JSON.parse(value);
+        } catch {
+          return value;
+        }
+      }
+      return value;
+    },
+    z
+      .array(
+        createMarathonDistanceDTOSchema
+          .extend({ distanceRuleId: z.string().optional() })
+          .omit({ marathonId: true }),
+      )
+      .optional(),
+  ),
 });
 
 export const updateMarathonDTOSchema = createMarathonDTOSchema

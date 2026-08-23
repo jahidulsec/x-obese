@@ -83,7 +83,7 @@ export const deleteMarathonReward = async (id: string) => {
 };
 
 
-export const deleteMarathonAgeRule = async (id: string) => {
+export const deleteMarathonDistanceRule = async (id: string) => {
   try {
     const res = await api.fetchWithAuth(
       `/api/marathon/v1/marathon/age-rule/${id}`,
