@@ -7,9 +7,9 @@ import * as marathonService from "../../../../../../services/marathon.ts";
 import { ErrorFactory } from "../../../../../../utils/error.ts";
 import { apiResponse } from "../../../../../../libs/response.ts";
 
-const deleteAgeRule = new Hono();
+const deleteDistanceRule = new Hono();
 
-deleteAgeRule.delete(
+deleteDistanceRule.delete(
   "/",
   jwtMiddleware,
   verifyRoles("superadmin", "admin"),
@@ -26,11 +26,11 @@ deleteAgeRule.delete(
     );
 
     if (deleted == 0) {
-      throw ErrorFactory.create("INTERNAL", "Age rule is not deleted");
+      throw ErrorFactory.create("INTERNAL", "Distance rule is not deleted");
     }
 
     const responseData = {
-      message: "Marathon age rule is deleted successfully!",
+      message: "Marathon distance rule is deleted successfully!",
       data: null,
     };
 
@@ -38,4 +38,4 @@ deleteAgeRule.delete(
   },
 );
 
-export { deleteAgeRule };
+export { deleteDistanceRule };

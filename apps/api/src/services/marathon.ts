@@ -162,7 +162,7 @@ const getSingleByUserId = async (idObj: requiredIdTypes, userId: string) => {
       },
       include: {
         Rewards: true,
-        marathoAgeRule: true,
+        MarathonDistance: true,
       },
     }),
     prisma.marathonUser.count({
@@ -238,17 +238,17 @@ const createNew = async (
           data: rewardsList,
         },
       },
-      ...(info.ageRule && {
-        marathoAgeRule: {
+      ...(info.distanceRule && {
+        MarathonDistance: {
           createMany: {
-            data: info.ageRule,
+            data: info.distanceRule,
           },
         },
       }),
     },
     include: {
       Rewards: true,
-      marathoAgeRule: true,
+      MarathonDistance: true,
     },
   });
 
@@ -284,10 +284,10 @@ const updateOne = async (
           },
         },
       }),
-      ...(info.ageRule && {
-        marathoAgeRule: {
+      ...(info.distanceRule && {
+        MarathonDistance: {
           createMany: {
-            data: info.ageRule,
+            data: info.distanceRule,
           },
         },
       }),
@@ -319,7 +319,7 @@ const deleteReward = async (id: string) => {
 };
 
 const deleteMarathonUserRule = async (id: string) => {
-  const deleted = await prisma.marathoAgeRule.delete({
+  const deleted = await prisma.marathonDistance.delete({
     where: { id: id },
   });
 

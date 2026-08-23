@@ -107,21 +107,21 @@ model WorkoutGoal {
 }
 
 model Marathon {
-  id                String             @id @default(uuid())
-  title             String
-  description       String             @db.Text
-  about             String             @db.Text
-  startDate         DateTime           @map("start_date")
-  endDate           DateTime           @map("end_date")
-  imagePath         String?            @map("image_path")
-  type              MarathonType       @default(onsite)
-  createdAt         DateTime           @default(now()) @map("created_at")
-  updatedAt         DateTime           @updatedAt @map("updated_at")
-  location          String?
-  distanceKm        Int
-  marathon_distance MarathonDistance[]
-  MarathonUser      MarathonUser[]
-  Rewards           Rewards[]
+  id               String             @id @default(uuid())
+  title            String
+  description      String             @db.Text
+  about            String             @db.Text
+  startDate        DateTime           @map("start_date")
+  endDate          DateTime           @map("end_date")
+  imagePath        String?            @map("image_path")
+  type             MarathonType       @default(onsite)
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  location         String?
+  distanceKm       Int
+  MarathonDistance MarathonDistance[]
+  MarathonUser     MarathonUser[]
+  Rewards          Rewards[]
 
   @@map("marathon")
 }

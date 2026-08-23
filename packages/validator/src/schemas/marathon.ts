@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { imageSchema } from "./common";
 
-export const createMarathonAgeRuleDTOSchema = z.object({
+export const createMarathonDistanceDTOSchema = z.object({
   marathonId: z.string().min(2, "At least 2 characters"),
 
-  ageMin: z.coerce.number().min(3, "At least 3 years").optional(),
-
-  ageMax: z.coerce.number().min(3, "At least 3 years").optional(),
+  attemptNo: z.coerce.number().min(1, "At least 1"),
 
   distanceKm: z.coerce.number().min(0.001),
+
+  description: z.string().optional(),
 });
 
 export const createMarathonDTOSchema = z.object({
@@ -30,33 +30,9 @@ export const createMarathonDTOSchema = z.object({
 
   type: z.enum(["onsite", "virtual"]),
 
-  ageRule: z.preprocess(
-    (value) => {
-      // multipart form data sends the array as a JSON string
-      if (typeof value === "string") {
-        try {
-          return JSON.parse(value);
-        } catch {
-          return value;
-        }
-      }
-      return value;
-    },
-    z
-      .array(
-        createMarathonAgeRuleDTOSchema
-          .extend({ ageRuleId: z.string().optional() })
-          .omit({ marathonId: true })
-          .refine(
-            (data) => data.ageMin !== undefined || data.ageMax !== undefined,
-            {
-              message: "Age minimum or age maximum is required",
-              path: ["ageMin"],
-            },
-          ),
-      )
-      .optional(),
-  ),
+  distanceRule: z
+    .array(createMarathonDistanceDTOSchema.omit({ marathonId: true }))
+    .optional(),
 });
 
 export const updateMarathonDTOSchema = createMarathonDTOSchema

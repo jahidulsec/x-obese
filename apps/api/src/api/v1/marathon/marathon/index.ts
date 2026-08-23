@@ -5,7 +5,7 @@ import { getMarathon } from "./controllers/get-single.ts";
 import { getMarathonStats } from "./controllers/get-stats.ts";
 import { deleteMarathon } from "./controllers/delete.ts";
 import { updateMarathon } from "./controllers/update.ts";
-import { marathonAgeRuleRouter } from "./age-rule/index.ts";
+import { marathonDistanceRuleRouter } from "./distance-rule/index.ts";
 import { getMarathons } from "./controllers/get-multi.ts";
 import { jwtMiddleware } from "../../../../middlewares/jwt.ts";
 import { verifyRoles } from "../../../../middlewares/verify-roles.ts";
@@ -24,6 +24,6 @@ mMarathonRouter.route("/:id", updateMarathon);
 
 mMarathonRouter.route("/reward/:id", deleteReward);
 
-mMarathonRouter.route("/age-rule", marathonAgeRuleRouter);
+mMarathonRouter.route("/age-rule", marathonDistanceRuleRouter);
 
 export { mMarathonRouter };
