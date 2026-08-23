@@ -107,21 +107,21 @@ model WorkoutGoal {
 }
 
 model Marathon {
-  id             String           @id @default(uuid())
-  title          String
-  description    String           @db.Text
-  about          String           @db.Text
-  startDate      DateTime         @map("start_date")
-  endDate        DateTime         @map("end_date")
-  imagePath      String?          @map("image_path")
-  type           MarathonType     @default(onsite)
-  createdAt      DateTime         @default(now()) @map("created_at")
-  updatedAt      DateTime         @updatedAt @map("updated_at")
-  location       String?
-  distanceKm     Int
-  marathoAgeRule marathoAgeRule[]
-  MarathonUser   MarathonUser[]
-  Rewards        Rewards[]
+  id                String             @id @default(uuid())
+  title             String
+  description       String             @db.Text
+  about             String             @db.Text
+  startDate         DateTime           @map("start_date")
+  endDate           DateTime           @map("end_date")
+  imagePath         String?            @map("image_path")
+  type              MarathonType       @default(onsite)
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  location          String?
+  distanceKm        Int
+  marathon_distance MarathonDistance[]
+  MarathonUser      MarathonUser[]
+  Rewards           Rewards[]
 
   @@map("marathon")
 }
@@ -178,18 +178,18 @@ model Banner {
   @@map("banner")
 }
 
-model marathoAgeRule {
-  id         String    @id @default(uuid()) @db.VarChar(36)
-  marathonId String    @map("marathon_id")
-  ageMin     Int?      @map("age_min")
-  ageMax     Int?      @map("age_max")
-  distanceKm Int       @map("distance_km")
-  created_at DateTime? @default(now()) @db.Timestamp(0)
-  updated_at DateTime? @default(now()) @db.Timestamp(0)
-  marathon   Marathon  @relation(fields: [marathonId], references: [id], onDelete: Cascade, map: "fk_marathon_age_rule_marathon")
+model MarathonDistance {
+  id          String    @id @default(nanoid()) @db.VarChar(21)
+  marathonId  String    @map("marathon_id")
+  distanceKm  Int       @map("distance_km")
+  attemptNo   Int       @map("attempt_no")
+  description String?   @db.VarChar(150)
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+  marathon    Marathon  @relation(fields: [marathonId], references: [id], onDelete: Cascade, map: "fk_marathon_distance_marathon")
 
-  @@index([marathonId], map: "fk_marathon_age_rule_marathon")
-  @@map("marathon_age_rule")
+  @@index([marathonId], map: "fk_marathon_distance_marathon")
+  @@map("marathon_distance")
 }
 
 enum AdminRoles {
