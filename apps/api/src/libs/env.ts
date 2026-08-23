@@ -17,6 +17,7 @@ export const env = createEnv({
     SSL_STATUS: z.string().optional().default("0"),
     SMS_USERNAME: z.string().min(1),
     SMS_PASSWORD: z.string().min(1),
+    PUBLIC_API_URL: z.string().min(1),
   },
   runtimeEnv: process.env,
 });

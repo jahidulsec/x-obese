@@ -59,7 +59,10 @@ updateMarathon.patch(
     }
 
     //update with validated data
-    const updated = await marathonService.updateOne({ id }, validatedData);
+    const updated = await marathonService.updateOne(
+      { id },
+      { ...validatedData, fileName: createdFileName },
+    );
 
     if (!updated) {
       throw ErrorFactory.create("INTERNAL", "Marathon is not updated");

@@ -294,12 +294,20 @@ const updateOne = async (
     },
   });
 
+  if (info.type === "onsite") {
+    await prisma.marathonDistance.deleteMany({
+      where: {
+        marathonId: updatedData.id,
+      },
+    });
+  }
+
   if (info.distanceRule) {
     const distanceRule = info.distanceRule;
 
     for (const i of distanceRule) {
       await prisma.marathonDistance.upsert({
-        where: { id: i.distanceRuleId },
+        where: { id: i.distanceRuleId ?? '' },
         create: {
           marathonId: updatedData.id,
           distanceKm: i.distanceKm,
@@ -307,6 +315,7 @@ const updateOne = async (
           description: i.description,
         },
         update: {
+          marathonId: updatedData.id,
           distanceKm: i.distanceKm,
           attemptNo: i.attemptNo,
           description: i.description,

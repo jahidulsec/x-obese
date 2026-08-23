@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import fsSync from "fs";
 import { storageFolderName } from "../libs/data.js";
+import { env } from "../libs/env.ts";
 
 export const generateFileLink = (c: Context, filePath: string) => {
   if (filePath.startsWith("http")) {
@@ -14,7 +15,11 @@ export const generateFileLink = (c: Context, filePath: string) => {
   const protocol =
     c.req.header("x-forwarded-proto") || url.protocol.replace(":", "");
 
-  const host = c.req.header("host") || url.host;
+  let host = c.req.header("host") || url.host;
+
+  if (host.startsWith("10.")) {
+    host = `${env.PUBLIC_API_URL}:${host.split(":")[1]}`;
+  }
 
   return `${protocol}://${host}/files/${filePath}`;
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import { createMarathonInputsTypes } from "@repo/validator";
-import React from "react";
 import { Controller, useFieldArray, UseFormReturn } from "react-hook-form";
 import {
   Empty,
@@ -50,7 +49,10 @@ export default function DistanceRuleForm({
 
       {fields.length > 0 ? (
         fields.map((item, index) => (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 border-b pb-3 last:border-0" key={index}>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-5 border-b pb-3 last:border-0"
+            key={index}
+          >
             <div className="md:col-span-2 flex items-end">
               <Controller
                 control={form.control}
