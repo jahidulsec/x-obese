@@ -180,6 +180,7 @@ const getSingleByUserId = async (idObj: requiredIdTypes, userId: string) => {
             image: true,
           },
         },
+        marathon_distance: true,
       },
       take: 3,
       orderBy: {
@@ -307,7 +308,7 @@ const updateOne = async (
 
     for (const i of distanceRule) {
       await prisma.marathonDistance.upsert({
-        where: { id: i.distanceRuleId ?? '' },
+        where: { id: i.distanceRuleId ?? "" },
         create: {
           marathonId: updatedData.id,
           distanceKm: i.distanceKm,

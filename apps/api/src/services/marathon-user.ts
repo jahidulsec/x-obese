@@ -102,6 +102,7 @@ const getSingle = async (idObj: requiredIdTypes) => {
           image: true,
         },
       },
+      marathon_distance: true,
     },
   });
 
@@ -136,9 +137,12 @@ const getSingleLeaderboard = async (idObj: requiredIdTypes) => {
 };
 
 const createNew = async (info: createMarathonUserInputsTypes) => {
+  const { distanceRuleId, ...rest } = info;
+
   const data = await prisma.marathonUser.create({
     data: {
-      ...info,
+      ...rest,
+      distanceRuleId: distanceRuleId,
     },
   });
 

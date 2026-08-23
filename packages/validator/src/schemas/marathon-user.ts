@@ -6,6 +6,7 @@ export const createMarathonUserDTOSchema = z.object({
   distanceKm: z.coerce.number().optional(),
   durationMs: z.coerce.number().optional(),
   submissionCount: z.coerce.number().optional(),
+  distanceRuleId: z.string().optional(),
 });
 
 export const updateMarathonUserDTOSchema = createMarathonUserDTOSchema
