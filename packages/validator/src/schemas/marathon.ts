@@ -11,46 +11,56 @@ export const createMarathonDistanceDTOSchema = z.object({
   description: z.string().optional(),
 });
 
-export const createMarathonDTOSchema = z.object({
-  title: z.string().min(3),
-  description: z.string().min(3),
-  about: z.string().min(3),
+export const createMarathonDTOSchema = z
+  .object({
+    title: z.string().min(3),
+    description: z.string().min(3),
+    about: z.string().min(3),
 
-  distanceKm: z.coerce.number().min(0.001),
+    distanceKm: z.coerce.number().min(0.001),
 
-  location: z.string().optional(),
+    location: z.string().optional(),
 
-  startDate: z.coerce.date(),
-  endDate: z.coerce.date(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
 
-  rewards: z.array(z.string()).optional(),
-  reward: z.string().min(2),
+    rewards: z.array(z.string()).optional(),
+    reward: z.string().min(2),
 
-  imagePath: imageSchema.optional(),
+    imagePath: imageSchema.optional(),
 
-  type: z.enum(["onsite", "virtual"]),
+    type: z.enum(["onsite", "virtual"]),
 
-  distanceRule: z.preprocess(
-    (value) => {
-      // multipart form data sends the array as a JSON string
-      if (typeof value === "string") {
-        try {
-          return JSON.parse(value);
-        } catch {
-          return value;
+    distanceRule: z.preprocess(
+      (value) => {
+        // multipart form data sends the array as a JSON string
+        if (typeof value === "string") {
+          try {
+            return JSON.parse(value);
+          } catch {
+            return value;
+          }
         }
-      }
-      return value;
-    },
-    z
-      .array(
-        createMarathonDistanceDTOSchema
-          .extend({ distanceRuleId: z.string().optional() })
-          .omit({ marathonId: true }),
-      )
-      .optional(),
-  ),
-});
+        return value;
+      },
+      z
+        .array(
+          createMarathonDistanceDTOSchema
+            .extend({ distanceRuleId: z.string().optional() })
+            .omit({ marathonId: true }),
+        )
+        .optional(),
+    ),
+  })
+  .superRefine((data, ctx) => {
+    if (data.type === "onsite" && !data.location?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["location"],
+        message: "Location is required for onsite marathons",
+      });
+    }
+  });
 
 export const updateMarathonDTOSchema = createMarathonDTOSchema
   .omit({})
