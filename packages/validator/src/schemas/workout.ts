@@ -5,7 +5,6 @@ export const createWorkOutDTOSchema = z.object({
   calories: z.coerce.number().optional(),
   distanceKm: z.coerce.number().optional(),
   heartPts: z.coerce.number().optional(),
-  workoutTime: z.coerce.number().optional(),
   type: z.enum(["running", "walking", "cycling"]).optional(),
   durationMs: z.coerce.number().optional(),
 });

@@ -15,7 +15,7 @@ const createUserWorkoutByToken = new Hono();
 
 createUserWorkoutByToken.post(
   "/",
-  validator("form", (value) => {
+  validator("json", (value) => {
     const parsed = createWorkOutDTOSchema
       .partial({ userId: true })
       .parse(value);
@@ -31,7 +31,9 @@ createUserWorkoutByToken.post(
     });
 
     // set userId from token
-    const validatedData = c.req.valid("form");
+    const validatedData = c.req.valid("json");
+
+    console.log(validatedData)
 
     //Validate incoming body data with defined schema
 

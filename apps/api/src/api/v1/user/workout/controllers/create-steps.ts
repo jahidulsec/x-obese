@@ -9,7 +9,7 @@ const createUserStep = new Hono();
 
 createUserStep.post(
   "/",
-  validator("form", (value) => {
+  validator("json", (value) => {
     const parsed = createStepsDTOSchema.partial({ userId: true }).parse(value);
     return parsed;
   }),
@@ -18,7 +18,7 @@ createUserStep.post(
     const authUser = c.get("jwtPayload") as AuthUser;
 
     //Validate incoming body data with defined schema
-    const validatedData = c.req.valid("form");
+    const validatedData = c.req.valid("json");
 
     //create new with validated data
     const created = await userService.createNewSteps({
