@@ -7,7 +7,7 @@ import { apiResponse } from "../../../../../libs/response.ts";
 
 const createUserStep = new Hono();
 
-createUserStep.patch(
+createUserStep.post(
   "/",
   validator("form", (value) => {
     const parsed = createStepsDTOSchema.parse(value);

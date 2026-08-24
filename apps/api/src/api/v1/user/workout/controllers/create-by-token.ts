@@ -13,7 +13,7 @@ import { apiResponse } from "../../../../../libs/response.ts";
 
 const createUserWorkoutByToken = new Hono();
 
-createUserWorkoutByToken.patch(
+createUserWorkoutByToken.post(
   "/",
   validator("form", (value) => {
     const parsed = createWorkOutDTOSchema.parse(value);

@@ -8,7 +8,7 @@ import { ErrorFactory } from "../../../../../utils/error.ts";
 
 const getUserActivityHistory = new Hono();
 
-getUserActivityHistory.patch(
+getUserActivityHistory.get(
   "/",
   validator("query", (value) => {
     const parsed = workOutsQuerySchema.parse(value);

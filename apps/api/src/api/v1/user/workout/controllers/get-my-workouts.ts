@@ -8,7 +8,7 @@ import { ErrorFactory } from "../../../../../utils/error.ts";
 
 const getMyWorkouts = new Hono();
 
-getMyWorkouts.patch(
+getMyWorkouts.get(
   "/",
   validator("query", (value) => {
     const parsed = workOutsQuerySchema.parse(value);
