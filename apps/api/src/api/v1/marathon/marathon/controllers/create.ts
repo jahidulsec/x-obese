@@ -7,6 +7,7 @@ import { ErrorFactory } from "../../../../../utils/error.ts";
 import * as marathonService from "../../../../../services/marathon.ts";
 import { apiResponse } from "../../../../../libs/response.ts";
 import { saveFileToStorage } from "../../../../../utils/file.ts";
+import z from "zod";
 
 const createMarathon = new Hono();
 
@@ -15,7 +16,17 @@ createMarathon.post(
   jwtMiddleware,
   verifyRoles("superadmin", "admin"),
   validator("form", (value) => {
-    const parsed = createMarathonDTOSchema.parse(value);
+    const parsed = createMarathonDTOSchema
+      .superRefine((data, ctx) => {
+        if (data.type === "onsite" && !data.location?.trim()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["location"],
+            message: "Location is required for onsite marathons",
+          });
+        }
+      })
+      .parse(value);
     return parsed;
   }),
   async (c) => {
