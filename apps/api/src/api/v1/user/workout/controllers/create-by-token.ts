@@ -16,7 +16,9 @@ const createUserWorkoutByToken = new Hono();
 createUserWorkoutByToken.post(
   "/",
   validator("form", (value) => {
-    const parsed = createWorkOutDTOSchema.parse(value);
+    const parsed = createWorkOutDTOSchema
+      .partial({ userId: true })
+      .parse(value);
     return parsed;
   }),
   async (c) => {
@@ -30,7 +32,6 @@ createUserWorkoutByToken.post(
 
     // set userId from token
     const validatedData = c.req.valid("form");
-    validatedData["userId"] = authUser?.id as string;
 
     //Validate incoming body data with defined schema
 
@@ -48,7 +49,10 @@ createUserWorkoutByToken.post(
     );
 
     //create new with validated data
-    const created = await userService.createNew(validatedData);
+    const created = await userService.createNew({
+      ...validatedData,
+      userId: authUser.id,
+    });
 
     const responseData = {
       message: "New user workout added successfully!",

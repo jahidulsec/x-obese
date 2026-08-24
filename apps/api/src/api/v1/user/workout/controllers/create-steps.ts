@@ -10,7 +10,7 @@ const createUserStep = new Hono();
 createUserStep.post(
   "/",
   validator("form", (value) => {
-    const parsed = createStepsDTOSchema.parse(value);
+    const parsed = createStepsDTOSchema.partial({ userId: true }).parse(value);
     return parsed;
   }),
   async (c) => {
@@ -20,11 +20,11 @@ createUserStep.post(
     //Validate incoming body data with defined schema
     const validatedData = c.req.valid("form");
 
-    // set userId from token
-    validatedData["userId"] = authUser?.id as string;
-
     //create new with validated data
-    const created = await userService.createNewSteps(validatedData);
+    const created = await userService.createNewSteps({
+      ...validatedData,
+      userId: authUser.id,
+    });
 
     const responseData = {
       message: "New user steps added successfully!",
