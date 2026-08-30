@@ -25,7 +25,9 @@ updateUserWorkoutPlan.patch(
     return parsed;
   }),
   validator("json", (value) => {
-    const parsed = updateWorkOutPlanDTOSchema.parse(value);
+    const parsed = updateWorkOutPlanDTOSchema
+      .partial({ userId: true })
+      .parse(value);
     return parsed;
   }),
   async (c) => {
@@ -170,7 +172,10 @@ updateUserWorkoutPlan.patch(
     }
 
     // create new with validated data
-    const updated = await userService.updateOne(validatedId, validatedData);
+    const updated = await userService.updateOne(validatedId, {
+      ...validatedData,
+      userId: authUser.id,
+    });
 
     const responseData = {
       message: "User workout plan updated successfully!",

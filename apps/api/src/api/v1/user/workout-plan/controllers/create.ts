@@ -22,7 +22,9 @@ const createUserWorkoutPlan = new Hono();
 createUserWorkoutPlan.post(
   "/",
   validator("json", (value) => {
-    const parsed = createWorkOutPlanDTOSchema.parse(value);
+    const parsed = createWorkOutPlanDTOSchema
+      .partial({ userId: true })
+      .parse(value);
     return parsed;
   }),
   async (c) => {
@@ -38,7 +40,7 @@ createUserWorkoutPlan.post(
     const validatedData = c.req.valid("json");
 
     // set userId from token
-    validatedData["userId"] = authUser?.id as string;
+    validatedData.userId = authUser?.id as string;
 
     // check schedule
     const scheduleList = await prisma.workoutGoal.findMany({
@@ -120,7 +122,10 @@ createUserWorkoutPlan.post(
     validatedData.caloriesGoal = calorieGoal;
 
     // create new with validated data
-    const created = await userService.createNew(validatedData);
+    const created = await userService.createNew({
+      ...validatedData,
+      userId: authUser.id,
+    });
 
     const responseData = {
       message: "New user workout plan added successfully!",
