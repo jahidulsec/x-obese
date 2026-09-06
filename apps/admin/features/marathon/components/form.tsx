@@ -60,7 +60,7 @@ export default function MarathonForm({
       distanceRule: prevData?.MarathonDistance?.map((i) => ({
         distanceKm: i.distanceKm,
         attemptNo: i.attemptNo,
-        description: i.description,
+        description: i.description ?? undefined,
         distanceRuleId: i.id,
       })),
     },
@@ -71,6 +71,7 @@ export default function MarathonForm({
   const type = form.watch("type");
   const startDate = form.watch("startDate");
   const endDate = form.watch("endDate");
+  const startRegistration = form.watch('startRegistration');
 
   async function onSubmit(data: any) {
     const res = prevData?.id
@@ -111,10 +112,6 @@ export default function MarathonForm({
       const start = new Date(startDate);
       start.setHours(0, 0, 0, 0);
 
-      console.log("date - ", date.toISOString())
-      console.log('start - ',start.toISOString())
-      console.log(date < start)
-
       // End must be after start
       if (date < start) return true;
     }
@@ -122,10 +119,61 @@ export default function MarathonForm({
     return date < minDate;
   };
 
+  const isStartRegistrationDisabled = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 1);
+
+    // must be less than end date
+    if (startDate) {
+      const end = new Date(startDate);
+      end.setHours(0, 0, 0, 0);
+
+      if (date > end) return true;
+    }
+
+    return date < minDate;
+  };
+
+  const isEndRegistrationDisabled = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 1);
+
+
+    // must be greater than start registration date
+    if (startRegistration) {
+      const start = new Date(startRegistration);
+      start.setHours(0, 0, 0, 0);
+
+
+      // End must be after start
+      if (date < start) return true;
+    }
+
+    // must be less than end date
+    if (startDate) {
+      const end = new Date(startDate);
+      end.setHours(0, 0, 0, 0);
+
+      if (date > end) return true;
+    }
+
+    return date < minDate;
+  };
+
+  const onError = () => {
+    toast.error("Please fix the highlighted fields");
+  };
+
   return (
     <form
       className={cn("border rounded-xl p-6", className)}
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit, onError)}
     >
       <FieldGroup className="grid grid-cols-1 md:grid-cols-3">
         <Controller
@@ -220,9 +268,41 @@ export default function MarathonForm({
             <Field>
               <FieldLabel htmlFor={field.name}>Ends at</FieldLabel>
               <DatePickerTime
-                defaultValue={prevData?.startDate}
+                defaultValue={prevData?.endDate}
                 onValueChange={(value) => field.onChange(value)}
                 disabled={isEndDisabled}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name="startRegistration"
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Start registration from</FieldLabel>
+              <DatePickerTime
+                defaultValue={prevData?.startRegistration ?? undefined}
+                onValueChange={(value) => field.onChange(value)}
+                disabled={isStartRegistrationDisabled}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name='endRegistration'
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Ends registration at</FieldLabel>
+              <DatePickerTime
+                defaultValue={prevData?.endRegistration ?? undefined}
+                onValueChange={(value) => field.onChange(value)}
+                disabled={isEndRegistrationDisabled}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

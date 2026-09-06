@@ -23,6 +23,10 @@ export const createMarathonDTOSchema = z.object({
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
 
+  startRegistration: z.coerce.date().optional(),
+  endRegistration: z.coerce.date().optional(),
+
+
   rewards: z.array(z.string()).optional(),
   reward: z.string().min(2),
 
