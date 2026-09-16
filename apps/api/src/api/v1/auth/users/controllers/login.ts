@@ -52,7 +52,7 @@ userLogin.post(
     });
 
     // send otp to mobile
-    const message = `Your One-Time Password (OTP) for X-Obses login is ${created.code}.`;
+    const message = `Your One-Time Password (OTP) for X-Obese login is ${created.code}.`;
 
     // avoid test number
     if (validatedData.mobile) {

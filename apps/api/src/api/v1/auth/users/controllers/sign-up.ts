@@ -50,7 +50,7 @@ userSignUp.post(
     const created = await authService.getSignUpOtp(validatedData);
 
     // send otp to mobile
-    const message = `Your One-Time Password (OTP) for X-Obses sign-up is ${created.code}.`;
+    const message = `Your One-Time Password (OTP) for X-Obese sign-up is ${created.code}.`;
 
     // avoid test number
     if (created.mobile) {
