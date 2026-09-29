@@ -130,8 +130,8 @@ export default function MarathonForm({
     minDate.setDate(minDate.getDate());
 
     // must be less than end date
-    if (startDate) {
-      const end = new Date(startDate);
+    if (endDate) {
+      const end = new Date(endDate);
       end.setHours(0, 0, 0, 0);
 
       if (date > end) return true;
@@ -158,8 +158,8 @@ export default function MarathonForm({
     }
 
     // must be less than end date
-    if (startDate) {
-      const end = new Date(startDate);
+    if (endDate) {
+      const end = new Date(endDate);
       end.setHours(0, 0, 0, 0);
 
       if (date > end) return true;
