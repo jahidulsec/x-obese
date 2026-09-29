@@ -71,7 +71,7 @@ export default function MarathonForm({
   const type = form.watch("type");
   const startDate = form.watch("startDate");
   const endDate = form.watch("endDate");
-  const startRegistration = form.watch('startRegistration');
+  const startRegistration = form.watch("startRegistration");
 
   async function onSubmit(data: any) {
     const res = prevData?.id
@@ -89,7 +89,8 @@ export default function MarathonForm({
     today.setHours(0, 0, 0, 0);
 
     const minDate = new Date(today);
-    minDate.setDate(minDate.getDate() + 1);
+    // minDate.setDate(minDate.getDate() + 1);
+    minDate.setDate(minDate.getDate());
 
     if (endDate) {
       const end = new Date(endDate);
@@ -106,7 +107,8 @@ export default function MarathonForm({
     today.setHours(0, 0, 0, 0);
 
     const minDate = new Date(today);
-    minDate.setDate(minDate.getDate() + 1);
+    // minDate.setDate(minDate.getDate() + 1);
+    minDate.setDate(minDate.getDate());
 
     if (startDate) {
       const start = new Date(startDate);
@@ -124,7 +126,8 @@ export default function MarathonForm({
     today.setHours(0, 0, 0, 0);
 
     const minDate = new Date(today);
-    minDate.setDate(minDate.getDate() + 1);
+    // minDate.setDate(minDate.getDate() + 1);
+    minDate.setDate(minDate.getDate());
 
     // must be less than end date
     if (startDate) {
@@ -142,14 +145,13 @@ export default function MarathonForm({
     today.setHours(0, 0, 0, 0);
 
     const minDate = new Date(today);
-    minDate.setDate(minDate.getDate() + 1);
-
+    // minDate.setDate(minDate.getDate() + 1);
+    minDate.setDate(minDate.getDate());
 
     // must be greater than start registration date
     if (startRegistration) {
       const start = new Date(startRegistration);
       start.setHours(0, 0, 0, 0);
-
 
       // End must be after start
       if (date < start) return true;
@@ -282,7 +284,9 @@ export default function MarathonForm({
           name="startRegistration"
           render={({ field, fieldState }) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Start registration from</FieldLabel>
+              <FieldLabel htmlFor={field.name}>
+                Start registration from
+              </FieldLabel>
               <DatePickerTime
                 defaultValue={prevData?.startRegistration ?? undefined}
                 onValueChange={(value) => field.onChange(value)}
@@ -295,7 +299,7 @@ export default function MarathonForm({
 
         <Controller
           control={form.control}
-          name='endRegistration'
+          name="endRegistration"
           render={({ field, fieldState }) => (
             <Field>
               <FieldLabel htmlFor={field.name}>Ends registration at</FieldLabel>
