@@ -30,7 +30,7 @@ export class JWT {
       },
       refresh: {
         key: refreshSecret,
-        expiresInSec: 24 * 60 * 60, // 1 day
+        expiresInSec: 7* 24 * 60 * 60, // 7 days
       },
     }[type];
   }
